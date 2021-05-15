@@ -1,44 +1,50 @@
 #include "minishell.h"
 
-int		sort_ft(char **buf)
+int		ft_putchar(int c)
 {
-	if (ft_strncmp(buf[0], "ls", ft_strlen(buf[0])) == 0)
-		printf("ls-----\n");
-	else
-		printf("diff-----\n");
-	return (0);
+	return (write(1, &c, 1));
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	int		ret;
-	char	*current_path;
-	char	*line;
 	char	tmp[MAXSIZE];
-	int		i;
-	char	**buf;
+	char	*term_name;
 	struct	termios term;
-	
+
+	term_name = "xterm-256color";
 	tcgetattr(0, &term);
 	term.c_lflag &= ~(ECHO);
 	term.c_lflag &= ~(ICANON);
 	tcsetattr(0, TCSANOW, &term);
-	(void)argv;
-	line = NULL;
-	ret = argc;
-	i = -1;
-
-	/*while (env[++i])
+	tgetent(0, term_name);
+	while (strcmp(tmp, "\4"))
 	{
-			write(1, env[i], ft_strlen(env[i]));
-			write(STDOUT, "\n", 1);
-	}*/
-	while (TRUE)
-	{
-		//ft_putstr_fd(getcwd(current_path, MAXSIZE), STDIN);
-		ft_putstr_fd("sh> ", STDOUT);
-		ret = read(STDIN, tmp, BUFFER_SIZE);
-		write(STDOUT, tmp, ret);
+		tputs(save_cursor, 1, ft_putchar);
+		do
+		{			
+			ret = read(STDIN, tmp, BUFFER_SIZE);
+			tmp[ret] = 0;
+			if (!strcmp(tmp, "\e[A"))
+			{
+				tputs(restore_cursor, 1, ft_putchar);
+				tputs(tgetstr("dc", NULL), 1, ft_putchar);
+				write(STDOUT, "previous", 8);
+			}
+			else if (!strcmp(tmp, "\e[B"))
+			{
+				tputs(restore_cursor, 1, ft_putchar);
+				tputs(tgetstr("dc", NULL), 1, ft_putchar);
+				write(STDOUT, "next", 4);
+			}
+			else if (!strcmp(tmp, "\177"))
+			{
+				tputs(cursor_left, 1, ft_putchar);
+				tputs(tgetstr("dc", NULL), 1, ft_putchar);
+			}
+			else
+				write(STDOUT, tmp, ret);
+		} while (strcmp(tmp, "\n") && strcmp(tmp, "\4"));
 	}
 	write(STDOUT, "\n", 1);
 	return (0);
