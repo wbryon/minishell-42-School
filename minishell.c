@@ -21,23 +21,19 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	char	buf[MAXSIZE];
 	int		i;
-	char	**var_env;
+	t_all	all;
 	char	*term_name;
 	struct	termios term;
 
 	(void)argv;
+	(void)argc;
 	line = ft_strdup("");
 	tmp = NULL;
 	i = -1;
-	while (envp[++i])
-		i++;
-	var_env = (char **)malloc(sizeof(char) * i);
+	all.env = (char **)malloc(sizeof(envp));
 	i = -1;
 	while (envp[++i])
-	{
-		var_env[i] = (char *)malloc(sizeof(char) * ft_strlen(envp[i]));
-		var_env[i] = envp[i];
-	}
+		all.env[i] = ft_strdup(envp[i]);
 	term_name = "xterm-256color";
 	tcgetattr(0, &term);
 	term.c_lflag &= ~(ECHO);
@@ -52,20 +48,20 @@ int	main(int argc, char **argv, char **envp)
 		buf[ret] = '\0';
 		if (!strcmp(buf, "\e[A"))
 		{
-			tputs(restore_cursor, 1, ft_putchar);
-			tputs(tgetstr("dc", NULL), 1, ft_putchar);
+			tputs(save_cursor, 1, ft_putchar);
+			tputs(tgetstr("cd", 0), 1, ft_putchar);
 			write(STDOUT, "previous", 8);
 		}
 		else if (!strcmp(buf, "\e[B"))
 		{
-			tputs(restore_cursor, 1, ft_putchar);
-			tputs(tgetstr("dc", NULL), 1, ft_putchar);
+			tputs(save_cursor, 1, ft_putchar);
+			tputs(tgetstr("cd", 0), 1, ft_putchar);
 			write(STDOUT, "next", 4);
 		}
 		else if (!strcmp(buf, "\177"))
 		{
 			tputs(cursor_left, 1, ft_putchar);
-			tputs(tgetstr("dc", NULL), 1, ft_putchar);
+			tputs(tgetstr("cd", 0), 1, ft_putchar);
 		}
 		else
 		{

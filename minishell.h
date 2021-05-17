@@ -36,6 +36,21 @@
 # define PIPE_ERROR 	"Pipe function is failed!"
 # define FORK_ERROR 	"Fork function is failed!"
 
-extern  char *environ;
+typedef struct s_history
+{
+	char				*tmp;
+	char				*prime;
+	struct s_history	*next;
+	struct s_history	*prev;
+
+} t_history;
+
+typedef struct s_all
+{
+    char        **env;
+    t_history   *cur_history;
+}               t_all;
+
+void 	get_history(char *buf, t_all *all);
 
 #endif
