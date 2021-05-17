@@ -11,13 +11,16 @@ int	main(int argc, char **argv, char **env)
 	char	tmp[MAXSIZE];
 	char	*term_name;
 	struct	termios term;
+	struct	winsize win;
 
+	ioctl(1, TIOCGWINSZ, &win);
 	term_name = "xterm-256color";
 	tcgetattr(0, &term);
 	term.c_lflag &= ~(ECHO);
 	term.c_lflag &= ~(ICANON);
 	tcsetattr(0, TCSANOW, &term);
 	tgetent(0, term_name);
+	
 	while (strcmp(tmp, "\4"))
 	{
 		tputs(save_cursor, 1, ft_putchar);
