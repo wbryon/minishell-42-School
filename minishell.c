@@ -1,5 +1,5 @@
 #include "minishell.h"
-int		ft_putchar(int c)
+static int		ft_putchar(int c)
 {
 	return (write(1, &c, 1));
 }
@@ -16,7 +16,6 @@ int		sort_ft(char **buf)
 int	main(int argc, char **argv, char **envp)
 {
 	int		ret;
-	char	*current_path;
 	char	*tmp;
 	char	*line;
 	char	buf[MAXSIZE];
@@ -40,36 +39,46 @@ int	main(int argc, char **argv, char **envp)
 	term.c_lflag &= ~(ICANON);
 	tcsetattr(0, TCSANOW, &term);
 	tgetent(0, term_name);
-	ft_putstr_fd("sh> ", STDOUT);
-	while (strcmp(buf, "\n") && strcmp(buf, "\4"))
+	while (strcmp(buf, "\4"))
 	{
+		ft_putstr_fd("sh> ", STDOUT);
 		tputs(save_cursor, 1, ft_putchar);
-		ret = read(STDIN, &buf, BUFFER_SIZE);
-		buf[ret] = '\0';
-		if (!strcmp(buf, "\e[A"))
+		while (ft_strcmp(buf, "\n"))
 		{
-			tputs(save_cursor, 1, ft_putchar);
-			tputs(tgetstr("cd", 0), 1, ft_putchar);
-			write(STDOUT, "previous", 8);
-		}
-		else if (!strcmp(buf, "\e[B"))
-		{
-			tputs(save_cursor, 1, ft_putchar);
-			tputs(tgetstr("cd", 0), 1, ft_putchar);
-			write(STDOUT, "next", 4);
-		}
-		else if (!strcmp(buf, "\177"))
-		{
-			tputs(cursor_left, 1, ft_putchar);
-			tputs(tgetstr("cd", 0), 1, ft_putchar);
-		}
-		else
-		{
-			write(STDOUT, buf, ret);
+			ret = read(STDIN, &buf, BUFFER_SIZE);
+			buf[ret] = '\0';
+			if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
 			{
-				tmp = line;
-				line = ft_strjoin(line, buf);
-				free(tmp);
+				tputs(save_cursor, 1, ft_putchar);
+				tputs(tgetstr("cd", 0), 1, ft_putchar);
+				write(STDOUT, "previous", 8);
+			}
+			else if (!ft_strcmp(buf, "\e[B"))//CURSOR DOWN
+			{
+				tputs(save_cursor, 1, ft_putchar);
+				tputs(tgetstr("cd", 0), 1, ft_putchar);
+				write(STDOUT, "next", 4);
+			}
+			else if (!ft_strcmp(buf, "\177"))//BACKSPACE
+			{
+				int len = (int)ft_strlen(line);
+				if (len > 0)
+				{
+					tputs(cursor_left, 1, ft_putchar);
+					tputs(delete_character, 1, ft_putchar);
+					line[len - 1] = '\0';
+				}
+			}
+			else if (!ft_strcmp(buf, "\011"))//TAB
+				tputs(cursor_normal, 1, ft_putchar);
+			else
+			{
+				write(STDOUT, buf, ret);
+				{
+					tmp = line;
+					line = ft_strjoin(line, buf);
+					free(tmp);
+				}
 			}
 		}
 	}
