@@ -31,7 +31,7 @@
 # define STDERR 		2
 
 # define SYNTAX_ERROR	"Syntax error: near unexpected token!"
-# define QUOTE_ERROR 	"The number of Quotes is odd!"
+# define QUOTE_ERROR 	"The number of quotes is odd!"
 # define MALLOC_ERROR 	"Memory malloc fail!"
 # define PIPE_ERROR 	"Pipe function is failed!"
 # define FORK_ERROR 	"Fork function is failed!"
@@ -43,14 +43,17 @@ typedef struct s_history
 	struct s_history	*next;
 	struct s_history	*prev;
 
-} t_history;
+}						t_history;
 
 typedef struct s_all
 {
-    char        **env;
-    t_history   *cur_history;
-}               t_all;
+	char		**env;
+	t_history	*cur_history;
+}				t_all;
 
-void 	get_history(char *buf, t_all *all);
+void		get_history(char *buf, t_all *all);
+t_history	*hist_new(char *content);
+void		hist_add(t_history **lst, t_history *new);
+void		read_line(char *buf, t_all *all);
 
 #endif

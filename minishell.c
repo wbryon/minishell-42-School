@@ -1,8 +1,4 @@
 #include "minishell.h"
-static int		ft_putchar(int c)
-{
-	return (write(1, &c, 1));
-}
 
 int		sort_ft(char **buf)
 {
@@ -26,11 +22,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	(void)argc;
+	ft_bzero(&all, sizeof(all));
 	line = ft_strdup("");
 	tmp = NULL;
 	i = -1;
 	all.env = (char **)malloc(sizeof(envp));
-	i = -1;
 	while (envp[++i])
 		all.env[i] = ft_strdup(envp[i]);
 	term_name = "xterm-256color";
@@ -47,7 +43,12 @@ int	main(int argc, char **argv, char **envp)
 		{
 			ret = read(STDIN, &buf, BUFFER_SIZE);
 			buf[ret] = '\0';
-			if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
+			if (ft_isprint(*buf))
+			{
+				read_line(buf, &all);
+				write(STDOUT, buf, ret);
+			}
+			else if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
 			{
 				tputs(save_cursor, 1, ft_putchar);
 				tputs(tgetstr("cd", 0), 1, ft_putchar);
@@ -71,15 +72,6 @@ int	main(int argc, char **argv, char **envp)
 			}
 			else if (!ft_strcmp(buf, "\011"))//TAB
 				tputs(cursor_normal, 1, ft_putchar);
-			else
-			{
-				write(STDOUT, buf, ret);
-				{
-					tmp = line;
-					line = ft_strjoin(line, buf);
-					free(tmp);
-				}
-			}
 		}
 	}
 	write(STDOUT, "\n", 1);
