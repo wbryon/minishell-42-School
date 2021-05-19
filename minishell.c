@@ -29,8 +29,8 @@ int	main(int argc, char **argv, char **envp)
 		all.env[i] = ft_strdup(envp[i]);
 	while (all.env)
 	{
-		if (!all.cur_history || (all.cur_history && all.cur_history->tmp[0]))
-			add_line_to_history(&all.cur_history, init_history_list(ft_strdup("")));
+		if (!all.history || (all.history && all.history->current[0]))
+			add_line_to_history(&all.history, init_history_list(ft_strdup("")));
 		hist_move_to_end(&all);
 		term_name = "xterm-256color";
 		tcgetattr(0, &term);
@@ -51,42 +51,42 @@ int	main(int argc, char **argv, char **envp)
 					read_line(buf, &all);
 					ft_putstr_fd(buf, 1);
 				}
-				else if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
+				else if (!ft_strcmp(buf, "\e[A"))//KEY UP
 				{
-					if (all.cur_history->prev)
+					if (all.history->prev)
 					{
-						all.cur_history = all.cur_history->prev;
+						all.history = all.history->prev;
 						tputs(restore_cursor, 1, ft_putchar);
 						tputs(tgetstr("cd", 0), 1, ft_putchar);
-						ft_putstr_fd(all.cur_history->tmp, 1);
+						ft_putstr_fd(all.history->current, 1);
 					}
 				}
-				else if (!ft_strcmp(buf, "\e[B"))//CURSOR DOWN
+				else if (!ft_strcmp(buf, "\e[B"))//KEY DOWN
 				{
-					if (all.cur_history->next)
+					if (all.history->next)
 					{
-						all.cur_history = all.cur_history->next;
+						all.history = all.history->next;
 						tputs(restore_cursor, 1, ft_putchar);
 						tputs(tgetstr("cd", 0), 1, ft_putchar);
-						ft_putstr_fd(all.cur_history->tmp, 1);
+						ft_putstr_fd(all.history->current, 1);
 					}
 				}
 				else if (!ft_strcmp(buf, "\177"))//BACKSPACE
 				{
-					int len = ft_strlen(all.cur_history->tmp);
+					int len = ft_strlen(all.history->current);
 					//printf("%s\n", all.cur_history->tmp);
 					if (len > 0)
 					{
 						tputs(cursor_left, 1, ft_putchar);
 						tputs(delete_character, 1, ft_putchar);
-						all.cur_history->tmp[len - 1] = '\0';
+						all.history->current[len - 1] = '\0';
 					}
 				}
 				else if (!ft_strcmp(buf, "\011"))//TAB
 					tputs(cursor_normal, 1, ft_putchar);
 			}
 			ft_bzero(buf, (int)ft_strlen(buf));
-			ft_bzero(all.cur_history->tmp, (int)ft_strlen(all.cur_history->tmp));
+			ft_bzero(all.history->current, ft_strlen(all.history->current));
 			write(STDOUT, "\n", 1);
 		}
 	}

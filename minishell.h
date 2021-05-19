@@ -38,7 +38,7 @@
 
 typedef struct s_history
 {
-	char				*tmp;
+	char				*current;
 	char				*prime;
 	struct s_history	*next;
 	struct s_history	*prev;
@@ -48,7 +48,7 @@ typedef struct s_history
 typedef struct s_all
 {
 	char		**env;
-	t_history	*cur_history;
+	t_history	*history;
 }				t_all;
 
 void		get_history(char *buf, t_all *all);
