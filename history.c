@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_history 	*hist_new(char *content)
+t_history 	*init_history_list(char *content)
 {
 	t_history	*new;
 
@@ -12,7 +12,7 @@ t_history 	*hist_new(char *content)
 	return (new);
 }
 
-void	hist_add(t_history **lst, t_history *new)
+void	add_line_to_history(t_history **lst, t_history *new)
 {
 	if (!*lst)
 	{
@@ -26,6 +26,12 @@ void	hist_add(t_history **lst, t_history *new)
 		(*lst)->next = new;
 		new->prev = *lst;
 	}
+}
+
+void	hist_move_to_end(t_all *all)
+{
+	while (all->cur_history->next)
+		all->cur_history = all->cur_history->next;
 }
 
 void 	read_line(char *buf, t_all *all)

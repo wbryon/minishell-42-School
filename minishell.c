@@ -29,49 +29,57 @@ int	main(int argc, char **argv, char **envp)
 	all.env = (char **)malloc(sizeof(envp));
 	while (envp[++i])
 		all.env[i] = ft_strdup(envp[i]);
-	term_name = "xterm-256color";
-	tcgetattr(0, &term);
-	term.c_lflag &= ~(ECHO);
-	term.c_lflag &= ~(ICANON);
-	tcsetattr(0, TCSANOW, &term);
-	tgetent(0, term_name);
-	while (strcmp(buf, "\4"))
+	while (all.env)
 	{
-		ft_putstr_fd("sh> ", STDOUT);
-		tputs(save_cursor, 1, ft_putchar);
-		while (ft_strcmp(buf, "\n"))
+		if (!all.cur_history || (all.cur_history && all.cur_history->tmp[0]))
+			add_line_to_history(&all.cur_history, init_history_list(ft_strdup("")));
+		hist_move_to_end(&all);
+		term_name = "xterm-256color";
+		tcgetattr(0, &term);
+		term.c_lflag &= ~(ECHO);
+		term.c_lflag &= ~(ICANON);
+		tcsetattr(0, TCSANOW, &term);
+		tgetent(0, term_name);
+		while (strcmp(buf, "\4"))
 		{
-			ret = read(STDIN, &buf, BUFFER_SIZE);
-			buf[ret] = '\0';
-			if (ft_isprint(*buf))
+			ft_putstr_fd("sh> ", STDOUT);
+			tputs(save_cursor, 1, ft_putchar);
+			while (strcmp(buf, "\n"))
 			{
-				read_line(buf, &all);
-				write(STDOUT, buf, ret);
-			}
-			else if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
-			{
-				tputs(save_cursor, 1, ft_putchar);
-				tputs(tgetstr("cd", 0), 1, ft_putchar);
-				write(STDOUT, "previous", 8);
-			}
-			else if (!ft_strcmp(buf, "\e[B"))//CURSOR DOWN
-			{
-				tputs(save_cursor, 1, ft_putchar);
-				tputs(tgetstr("cd", 0), 1, ft_putchar);
-				write(STDOUT, "next", 4);
-			}
-			else if (!ft_strcmp(buf, "\177"))//BACKSPACE
-			{
-				int len = (int)ft_strlen(line);
-				if (len > 0)
+				ret = read(STDIN, &buf, BUFFER_SIZE);
+				buf[ret] = '\0';
+				if (ft_isprint(*buf))
 				{
-					tputs(cursor_left, 1, ft_putchar);
-					tputs(delete_character, 1, ft_putchar);
-					line[len - 1] = '\0';
+					read_line(buf, &all);
+					ft_putstr_fd(buf, 1);
 				}
+				else if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
+				{
+					all.cur_history = all.cur_history->prev;
+					tputs(save_cursor, 1, ft_putchar);
+					tputs(tgetstr("cd", 0), 1, ft_putchar);
+					ft_putstr_fd(all.cur_history->tmp, 1);
+				}
+				else if (!ft_strcmp(buf, "\e[B"))//CURSOR DOWN
+				{
+					all.cur_history = all.cur_history->next;
+					tputs(save_cursor, 1, ft_putchar);
+					tputs(tgetstr("cd", 0), 1, ft_putchar);
+					ft_putstr_fd(all.cur_history->tmp, 1);
+				}
+				else if (!ft_strcmp(buf, "\177"))//BACKSPACE
+				{
+					int len = (int)ft_strlen(line);
+					if (len > 0)
+					{
+						tputs(cursor_left, 1, ft_putchar);
+						tputs(delete_character, 1, ft_putchar);
+						line[len - 1] = '\0';
+					}
+				}
+				else if (!ft_strcmp(buf, "\011"))//TAB
+					tputs(cursor_normal, 1, ft_putchar);
 			}
-			else if (!ft_strcmp(buf, "\011"))//TAB
-				tputs(cursor_normal, 1, ft_putchar);
 		}
 	}
 	write(STDOUT, "\n", 1);

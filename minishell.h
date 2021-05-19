@@ -52,8 +52,9 @@ typedef struct s_all
 }				t_all;
 
 void		get_history(char *buf, t_all *all);
-t_history	*hist_new(char *content);
-void		hist_add(t_history **lst, t_history *new);
+t_history	*init_history_list(char *content);
+void		add_line_to_history(t_history **lst, t_history *new);
+void		hist_move_to_end(t_all *all);
 void		read_line(char *buf, t_all *all);
 
 #endif
