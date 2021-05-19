@@ -13,7 +13,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	int		ret;
 	char	*tmp;
-	char	*line;
 	char	buf[MAXSIZE];
 	int		i;
 	t_all	all;
@@ -23,7 +22,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	ft_bzero(&all, sizeof(all));
-	line = ft_strdup("");
 	tmp = NULL;
 	i = -1;
 	all.env = (char **)malloc(sizeof(envp));
@@ -40,10 +38,10 @@ int	main(int argc, char **argv, char **envp)
 		term.c_lflag &= ~(ICANON);
 		tcsetattr(0, TCSANOW, &term);
 		tgetent(0, term_name);
-		while (strcmp(buf, "\4"))
+		while (ft_strcmp(buf, "\4"))
 		{
-			ft_putstr_fd("sh> ", STDOUT);
 			tputs(save_cursor, 1, ft_putchar);
+			ft_putstr_fd("minishell> ", STDOUT);
 			while (strcmp(buf, "\n"))
 			{
 				ret = read(STDIN, &buf, BUFFER_SIZE);
@@ -55,31 +53,41 @@ int	main(int argc, char **argv, char **envp)
 				}
 				else if (!ft_strcmp(buf, "\e[A"))//CURSOR UP
 				{
-					all.cur_history = all.cur_history->prev;
-					tputs(save_cursor, 1, ft_putchar);
-					tputs(tgetstr("cd", 0), 1, ft_putchar);
-					ft_putstr_fd(all.cur_history->tmp, 1);
+					if (all.cur_history->prev)
+					{
+						all.cur_history = all.cur_history->prev;
+						tputs(restore_cursor, 1, ft_putchar);
+						tputs(tgetstr("cd", 0), 1, ft_putchar);
+						ft_putstr_fd(all.cur_history->tmp, 1);
+					}
 				}
 				else if (!ft_strcmp(buf, "\e[B"))//CURSOR DOWN
 				{
-					all.cur_history = all.cur_history->next;
-					tputs(save_cursor, 1, ft_putchar);
-					tputs(tgetstr("cd", 0), 1, ft_putchar);
-					ft_putstr_fd(all.cur_history->tmp, 1);
+					if (all.cur_history->next)
+					{
+						all.cur_history = all.cur_history->next;
+						tputs(restore_cursor, 1, ft_putchar);
+						tputs(tgetstr("cd", 0), 1, ft_putchar);
+						ft_putstr_fd(all.cur_history->tmp, 1);
+					}
 				}
 				else if (!ft_strcmp(buf, "\177"))//BACKSPACE
 				{
-					int len = (int)ft_strlen(line);
+					int len = ft_strlen(all.cur_history->tmp);
+					//printf("%s\n", all.cur_history->tmp);
 					if (len > 0)
 					{
 						tputs(cursor_left, 1, ft_putchar);
 						tputs(delete_character, 1, ft_putchar);
-						line[len - 1] = '\0';
+						all.cur_history->tmp[len - 1] = '\0';
 					}
 				}
 				else if (!ft_strcmp(buf, "\011"))//TAB
 					tputs(cursor_normal, 1, ft_putchar);
 			}
+			ft_bzero(buf, (int)ft_strlen(buf));
+			ft_bzero(all.cur_history->tmp, (int)ft_strlen(all.cur_history->tmp));
+			write(STDOUT, "\n", 1);
 		}
 	}
 	write(STDOUT, "\n", 1);
