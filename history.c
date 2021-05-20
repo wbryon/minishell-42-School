@@ -5,7 +5,7 @@ t_history 	*init_history_list(char *content)
 	t_history	*new;
 
 	new = malloc(sizeof(t_history));
-	new->tmp = content;
+	new->current = content;
 	new->next = NULL;
 	new->prev = NULL;
 	new->prime = NULL;
@@ -30,15 +30,15 @@ void	add_line_to_history(t_history **lst, t_history *new)
 
 void	hist_move_to_end(t_all *all)
 {
-	while (all->cur_history->next)
-		all->cur_history = all->cur_history->next;
+	while (all->history->next)
+		all->history = all->history->next;
 }
 
-void 	read_line(char *buf, t_all *all)
+void 	write_line_to_hist(char *buf, t_all *all)
 {
 	char	*tmp;
 
-	tmp = all->cur_history->tmp;
-	all->cur_history->tmp = ft_strjoin(all->cur_history->tmp, buf);
+	tmp = all->history->current;
+	all->history->current = ft_strjoin(all->history->current, buf);
 	free(tmp);
 }
