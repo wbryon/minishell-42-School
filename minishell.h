@@ -48,18 +48,19 @@ typedef struct s_history
 typedef struct s_all
 {
 	char			**env;
-	struct termios	params;
 	t_history		*history;
+	struct termios	params;
 }					t_all;
 
 void		get_history(char *buf, t_all *all);
-t_history	*init_history_list(char *content);
 int			init_termcap_functions(t_all *all);
-int			up_down_keys(t_all *all, char *buf);
+t_history	*init_history_list(char *content);
 void		add_line_to_history(t_history **lst, t_history *new);
-int			goto_new_prompt(t_all *all);
 void		hist_move_to_end(t_all *all);
-void		write_line_to_hist(char *buf, t_all *all);
-int			do_backspace(char *str);
+void		write_line_to_history(char *buf, t_all *all);
+int			check_string(char *buf, t_all *all);
+int			if_up_down_keys(t_all *all, char *buf);
+int			if_backspace(t_all *all, char *buf);
+int			ctrl_d(t_all *all);
 
 #endif

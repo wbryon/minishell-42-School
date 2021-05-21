@@ -34,7 +34,7 @@ void	hist_move_to_end(t_all *all)
 		all->history = all->history->next;
 }
 
-void 	write_line_to_hist(char *buf, t_all *all)
+void 	write_line_to_history(char *buf, t_all *all)
 {
 	char	*tmp;
 

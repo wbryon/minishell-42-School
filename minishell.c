@@ -28,24 +28,9 @@ int	main(int argc, char **argv, char **envp)
 		{
 			ret = read(STDIN, &buf, BUFFER_SIZE);
 			buf[ret] = '\0';
-			if (ft_isprint(*buf))
-			{
-				write_line_to_hist(buf, &all);
-				ft_putstr_fd(buf, 1);
-			}
-			else if (*buf == '\n')
-				goto_new_prompt(&all);
-			else if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))//KEYS UP_DOWN
-				up_down_keys(&all, buf);
-			else if (*buf == '\177')//BACKSPACE
-				do_backspace(all.history->current);
-			else if (!ft_strcmp(buf, "\011"))//TAB
-				tputs(cursor_normal, 1, ft_putchar);
-			ft_bzero(buf, (int)ft_strlen(buf));
-			ft_bzero(all.history->current, ft_strlen(all.history->current));
-			write(STDOUT, "\n", 1);
+			if (check_string(buf, &all))
+				break ;
 		}
 	}
-	write(STDOUT, "\n", 1);
 	return (0);
 }
