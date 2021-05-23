@@ -62,5 +62,6 @@ int			check_string(char *buf, t_all *all);
 int			if_up_down_keys(t_all *all, char *buf);
 int			if_backspace(t_all *all, char *buf);
 int			ctrl_d(t_all *all);
-
+char		*parser(t_all *all);
+char		*parse_quotes(t_all *all, int *i);
 #endif

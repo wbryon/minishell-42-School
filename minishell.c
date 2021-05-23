@@ -7,6 +7,7 @@ int	main(int argc, char **argv, char **envp)
 	char	buf[MAXSIZE];
 	int		i;
 	t_all	all;
+	char	*str;
 
 	(void)argv;
 	(void)argc;
@@ -18,8 +19,9 @@ int	main(int argc, char **argv, char **envp)
 		all.env[i] = ft_strdup(envp[i]);
 	while (all.env)
 	{
-		if (!all.history || (all.history && all.history->current[0]))
+		if (!all.history || (all.history && all.history->current[0] != '\0'))
 			add_line_to_history(&all.history, init_history_list(ft_strdup("")));
+		printf("%s\n", all.history->current);
 		hist_move_to_end(&all);
 		init_termcap_functions(&all);
 		ft_putstr_fd("minishell> ", STDOUT);
@@ -31,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 			if (check_string(buf, &all))
 				break ;
 		}
+		str = parser(&all);
 	}
 	return (0);
 }

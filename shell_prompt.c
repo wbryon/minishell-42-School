@@ -112,9 +112,9 @@ int		check_string(char *buf, t_all *all)
 	}
 	else if (!ft_strcmp(buf, "\n"))
 		return (new_prompt(all));
-	else if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))//KEYS UP_DOWN
+	else if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))
 		return (if_up_down_keys(all, buf));
-	else if (!ft_strcmp(buf, "\177"))//BACKSPACE
+	else if (!ft_strcmp(buf, "\177"))
 		return (if_backspace(all, buf));
 	else if (!ft_strcmp(buf, "\3"))
 		return (ctrl_c(all));
