@@ -2,7 +2,8 @@ SRCS	=	minishell.c\
 			history.c\
 			shell_prompt.c\
 			parser.c\
-			init_vars.c
+			init_vars.c\
+			check_syntax.c
 
 NAME	= minishell
 

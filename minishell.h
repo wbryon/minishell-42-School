@@ -53,16 +53,29 @@ typedef struct s_semicolon
 	char	**semicolon;
 }			t_semicolon;
 
+typedef struct s_exec
+{
+	char	*cmd;
+}			t_exec;
+
+
+enum e_states
+{
+	D_QUOTE,
+	S_QUOTE,
+	GENERAL,
+};
 
 typedef struct s_all
 {
 	char			**env;
 	t_history		*history;
+	t_exec			exec;
 	t_semicolon		s_c;
 	struct termios	params;
 }					t_all;
 
-void		init_structs(t_all *all);
+void		init_vars(t_all *all);
 void		get_history(char *buf, t_all *all);
 int			init_termcap_functions(t_all *all);
 t_history	*init_history_list(char *content);
@@ -76,5 +89,5 @@ int			ctrl_d(t_all *all);
 char		*parser(t_all *all);
 int			check_quotes(t_all *all);
 void		parse_semicolon(t_all *all, int *i);
-char		*parse_quotes(t_all *all, int *i);
+char		*parse_quotes(char *str, int *i);
 #endif

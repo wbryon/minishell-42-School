@@ -19,9 +19,9 @@ int	main(int argc, char **argv, char **envp)
 		all.env[i] = ft_strdup(envp[i]);
 	while (all.env)
 	{
+		init_vars(&all);
 		if (!all.history || (all.history && all.history->current[0] != '\0'))
 			add_line_to_history(&all.history, init_history_list(ft_strdup("")));
-		printf("%s\n", all.history->current);
 		hist_move_to_end(&all);
 		init_termcap_functions(&all);
 		ft_putstr_fd("minishell> ", STDOUT);
@@ -33,7 +33,13 @@ int	main(int argc, char **argv, char **envp)
 			if (check_string(buf, &all))
 				break ;
 		}
+		if (check_quotes(&all))
+		{
+			ft_putstr_fd("Syntax error\n", STDOUT);
+			break ;
+		}
 		str = parser(&all);
+		printf("|%s|\n", str);
 	}
 	return (0);
 }
