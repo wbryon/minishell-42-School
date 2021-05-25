@@ -45,13 +45,24 @@ typedef struct s_history
 
 }						t_history;
 
+typedef struct s_semicolon
+{
+	int		count;
+	int		s_quotes;
+	int		d_quotes;
+	char	**semicolon;
+}			t_semicolon;
+
+
 typedef struct s_all
 {
 	char			**env;
 	t_history		*history;
+	t_semicolon		s_c;
 	struct termios	params;
 }					t_all;
 
+void		init_structs(t_all *all);
 void		get_history(char *buf, t_all *all);
 int			init_termcap_functions(t_all *all);
 t_history	*init_history_list(char *content);
@@ -63,5 +74,7 @@ int			if_up_down_keys(t_all *all, char *buf);
 int			if_backspace(t_all *all, char *buf);
 int			ctrl_d(t_all *all);
 char		*parser(t_all *all);
+int			check_quotes(t_all *all);
+void		parse_semicolon(t_all *all, int *i);
 char		*parse_quotes(t_all *all, int *i);
 #endif
