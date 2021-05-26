@@ -11,6 +11,7 @@ char	*parser(t_all *all)
 		if (tmp[i] == '\'')
 			tmp = parse_quotes(tmp, &i);
 	}
+	printf("|final=%s|\n", tmp);
 	return (tmp);
 }
 
@@ -18,34 +19,35 @@ char	*parse_quotes(char *str, int *i)
 {
 	int		j;
 	char	*tmp;
-	// char	*tmp2;
-	// char	*tmp3;
+	char	*tmp2;
+	char	*tmp3;
 
 	j = *i;
 	tmp = NULL;
 	while (str[++(*i)] != '\0')
 	{
-		if (str[*i] == '\'')
+		if (str[*i] == '\'' && str[*i - 1] == '\'')
 		{
-			if (*i - j == 1)
-			{
-				tmp = ft_substr(str, *i + 1, (int)ft_strlen(str));
-				free(str);
-				break ;
-			}
-			else
-				tmp = ft_substr(str, j + 1, *i - 1);
-			break ;
+			tmp = ft_strdup(str + *i);
+			*i = -1;
+			free(str);
+			return (tmp);
 		}
+		if (str[*i] == '\'')
+			break ;
 	}
-	// tmp = ft_substr(str, j + 1, *i - 1);
-	printf("|%d|  |%d|  |cmd=%s|\n", j, *i, tmp);
-	// tmp2 = ft_substr(str, j + 1, *i - j - 1);
-	// tmp3 = ft_strdup(str + *i + 1);
-	// tmp = ft_strjoin(tmp, tmp2);
-	// tmp = ft_strjoin(tmp, tmp3);
-	// free(tmp2);
-	// free(tmp3);
+	tmp = ft_substr(str, 0, j);
+	printf("|*i=%d|  |j=%d|  |tmp=%s|\n", *i, j, tmp);
+	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
+	printf("|tmp2=%s|\n", tmp2);
+	tmp3 = ft_strdup(str + *i + 1);
+	printf("|tmp3=%s|\n", tmp);
+	tmp = ft_strjoin(tmp, tmp2);
+	printf("|tmp+tmp2=%s|\n", tmp);
+	tmp = ft_strjoin(tmp, tmp3);
+	printf("|tmp+tmp3=%s|\n", tmp);
+	free(tmp2);
+	free(tmp3);
 	return (tmp);
 }
 

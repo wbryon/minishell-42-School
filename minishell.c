@@ -35,11 +35,10 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (check_quotes(&all))
 		{
-			ft_putstr_fd("Syntax error\n", STDOUT);
+			ft_putstr_fd("Syntax error: the number of quotes is odd!\n", STDOUT);
 			break ;
 		}
 		str = parser(&all);
-		printf("|%s|\n", str);
 	}
 	return (0);
 }
