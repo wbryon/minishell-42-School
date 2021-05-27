@@ -2,7 +2,7 @@
 
 int	check_quotes(t_all *all)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (all->history->current[++i] != '\0')
@@ -11,7 +11,8 @@ int	check_quotes(t_all *all)
 		{
 			if (all->history->current[i - 1] && all->history->current[i - 1] == '\\')
 				i++;
-			all->s_c.s_quotes++;
+			else
+				all->s_c.s_quotes++;
 		}
 	}
 	i = -1;
@@ -21,7 +22,8 @@ int	check_quotes(t_all *all)
 		{
 			if (all->history->current[i - 1] && all->history->current[i - 1] == '\\')
 				i++;
-			all->s_c.d_quotes++;
+			else
+				all->s_c.d_quotes++;
 		}
 	}
 	if (all->s_c.s_quotes % 2 != 0 || all->s_c.d_quotes % 2 != 0)
