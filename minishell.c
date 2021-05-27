@@ -13,10 +13,14 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	ft_bzero(&all, sizeof(all));
 	tmp = NULL;
+	i = 0;
+	while (envp[i])
+		i++;
+	all.env = (char **)malloc(sizeof(char *) * (i + 1));
 	i = -1;
-	all.env = (char **)malloc(sizeof(envp));
 	while (envp[++i])
 		all.env[i] = ft_strdup(envp[i]);
+	all.env[i] = NULL;
 	while (all.env)
 	{
 		init_vars(&all);
