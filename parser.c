@@ -16,7 +16,6 @@ char	*parser(t_all *all)
 				tmp = parse_quotes(tmp, &i);				
 		}
 	}
-	printf("|final=%s|\n", tmp);
 	return (tmp);
 }
 
@@ -31,7 +30,6 @@ char	*parse_quotes(char *str, int *i)
 	tmp = NULL;
 	while (str[++(*i)] != '\0')
 	{
-		printf("|i=%d|   |str=%s|\n", *i, str);
 		if (str[*i] == '\'' && str[*i - 1] == '\'')
 		{
 			tmp = ft_strdup(str + *i);
@@ -45,15 +43,10 @@ char	*parse_quotes(char *str, int *i)
 			break ;
 	}
 	tmp = ft_substr(str, 0, j);
-	printf("|*i=%d|  |j=%d|  |tmp=%s|\n", *i, j, tmp);
 	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
-	printf("|*i=%d|  |j=%d|  |tmp2=%s|\n", *i, j, tmp2);
 	tmp3 = ft_strdup(str + *i + 1);
-	printf("|*i=%d|  |j=%d|  |tmp3=%s|\n", *i, j, tmp3);
 	tmp = ft_strjoin(tmp, tmp2);
-	printf("|*i=%d|  |tmp+tmp2=%s|\n", *i, tmp);
 	tmp = ft_strjoin(tmp, tmp3);
-	printf("|*i=%d|  |tmp+tmp3=%s|\n", *i, tmp);
 	free(tmp2);
 	free(tmp3);
 	return (tmp);
@@ -73,40 +66,4 @@ void	parse_semicolon(t_all *all, int *i)
 			break ;
 		}
 	}
-}
-
-static void	if_general(char **str, int *state)
-{
-	if (**str == '\\' && *(*str + 1) != '\0')
-		*str = *str + 1;
-	else if (**str == '\'')
-		*state = S_QUOTE;
-	else if (**str == '\"')
-		*state = D_QUOTE;
-}
-
-int	validate_quotes(char *str)
-{
-	int	state;
-
-	state = GENERAL;
-	while (*str)
-	{
-		if (state == GENERAL)
-			if_general(&str, &state);
-		else if (state == S_QUOTE && *str == '\'')
-			state = GENERAL;
-		else if (state == D_QUOTE)
-		{
-			if (*str == '\\' && *(str + 1) != '\0')
-				str++;
-			else if (*str == '\"')
-				state = GENERAL;
-		}
-		if (*str != '\0')
-			str++;
-	}
-	if (state != GENERAL)
-		return (-1);
-	return (0);
 }

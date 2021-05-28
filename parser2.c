@@ -4,12 +4,20 @@ static char	*ft_slash(char *str, int *i)
 {
 	char	*tmp;
 	char	*tmp2;
-
-	tmp = ft_substr(str, 0, *i);
-	tmp2 = ft_strdup(str + *i + 1);
-	tmp = ft_strjoin(tmp, tmp2);
-	free(str);
-	++(*i);
+	if (str[*i + 1] && str[*i + 1] == '\'')
+	{
+		tmp = ft_substr(str, 0, *i);
+		tmp2 = ft_strdup(str + *i + 1);
+		tmp = ft_strjoin(tmp, tmp2);
+		free(str);
+		++(*i);
+		return (tmp);
+	}
+	else
+	{
+		tmp = ft_strdup(str);
+		free(str);
+	}
 	return (tmp);
 }
 
@@ -24,17 +32,22 @@ static char	*ft_squote(char *str, int *i)
 	while (str[++(*i)])
 	{
 		if (str[*i] == '\'')
-			break;
+			break ;
 	}
 	tmp = ft_substr(str, 0, j);
+	//printf("|tmp=%s|\n", tmp);
 	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
+	//printf("|tmp2=%s|\n", tmp2);
 	tmp3 = tmp;
 	tmp = ft_strjoin(tmp, tmp2);
+	//printf("|tmp+tmp2=%s|\n", tmp);
 	free(tmp2);
 	free(tmp3);
 	tmp3 = ft_strdup(str + *i + 1);
+	//printf("|tmp3=%s|\n", tmp3);
 	tmp2 = tmp;
 	tmp = ft_strjoin(tmp, tmp3);
+	//printf("|tmp+tmp3=%s|\n", tmp);
 	free(tmp2);
 	free(tmp3);
 	free(str);
@@ -98,7 +111,6 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 	tmp = ft_strjoin(tmp, tmp2);
 	free(tmp2);
 	free(tmp3);
-//	printf("tmp: %s\n", tmp);
 	free(str);
 	return (tmp);
 }

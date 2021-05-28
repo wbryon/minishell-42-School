@@ -42,7 +42,8 @@ int	main(int argc, char **argv, char **envp)
 			ft_putstr_fd("Syntax error: the number of quotes is odd!\n", STDOUT);
 			break ;
 		}
-		str = parser(&all);
+		str = parser2(&all);
+		printf("|str_final=%s|\n", str);
 	}
 	return (0);
 }

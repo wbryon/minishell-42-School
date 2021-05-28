@@ -42,8 +42,15 @@ typedef struct s_history
 	char				*prime;
 	struct s_history	*next;
 	struct s_history	*prev;
-
 }						t_history;
+
+typedef struct s_cmd
+{
+	char			*current;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+}					t_cmd;
+
 
 typedef struct s_semicolon
 {
@@ -58,18 +65,11 @@ typedef struct s_exec
 	char	*cmd;
 }			t_exec;
 
-
-enum e_states
-{
-	D_QUOTE,
-	S_QUOTE,
-	GENERAL,
-};
-
 typedef struct s_all
 {
 	char			**env;
 	t_history		*history;
+	t_cmd			cmd;
 	t_exec			exec;
 	t_semicolon		s_c;
 	struct termios	params;
@@ -87,6 +87,9 @@ int			if_up_down_keys(t_all *all, char *buf);
 int			if_backspace(t_all *all, char *buf);
 int			ctrl_d(t_all *all);
 char		*parser(t_all *all);
+char		*parser2(t_all *all);
+void		check_d_quotes(t_all *all);
+void		check_s_quotes(t_all *all);
 int			check_quotes(t_all *all);
 void		parse_semicolon(t_all *all, int *i);
 char		*parse_quotes(char *str, int *i);
