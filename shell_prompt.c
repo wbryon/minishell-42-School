@@ -21,25 +21,6 @@ int	init_termcap_functions(t_all *all)
 	return (0);
 }
 
-int		new_prompt(t_all *all)
-{
-	char	*tmp;
-
-	tcsetattr(0, TCSANOW, &all->params);
-	if (!all->history->prime)
-		all->history->prime = ft_strdup(all->history->current);
-	else if (*all->history->current)
-	{
-		tmp = ft_strdup(all->history->current);
-		free(all->history->current);
-		all->history->current = ft_strdup(all->history->prime);
-		hist_move_to_end(all);
-		free(all->history->current);
-		all->history->current = tmp;
-	}
-	return (write(1, "\n", 1));
-}
-
 int	ctrl_c(t_all *all)
 {
 	//env_set_value(all, "?", "1");

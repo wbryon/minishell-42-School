@@ -7,11 +7,11 @@ void	check_s_quotes(t_all *all)
 
 	i = -1;
 	s_quotes = 0;
-	while (all->history->current[++i] != '\0')
+	while (all->command_buf[++i] != '\0')
 	{
-		if (all->history->current[i] == '\'')
+		if (all->command_buf[i] == '\'')
 		{
-			if (all->history->current[i - 1] && all->history->current[i - 1] == '\\')
+			if (all->command_buf[i - 1] && all->command_buf[i - 1] == '\\')
 			{
 				if (all->s_c.s_quotes && all->s_c.s_quotes % 2 != 0)
 					all->s_c.s_quotes++;
@@ -29,11 +29,11 @@ void	check_d_quotes(t_all *all)
 	int	i;
 
 	i = -1;
-	while (all->history->current[++i] != '\0')
+	while (all->command_buf[++i] != '\0')
 	{
-		if (all->history->current[i] == '"')
+		if (all->command_buf[i] == '"')
 		{
-			if (all->history->current[i - 1] && all->history->current[i - 1] == '\\')
+			if (all->command_buf[i - 1] && all->command_buf[i - 1] == '\\')
 			{
 				if (all->s_c.d_quotes && all->s_c.d_quotes % 2 != 0)
 					all->s_c.d_quotes++;

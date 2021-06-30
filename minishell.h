@@ -66,6 +66,7 @@ typedef struct s_all
 	t_exec			exec;
 	t_semicolon		s_c;
 	struct termios	params;
+	char			*command_buf;
 }					t_all;
 
 void		init_vars(t_all *all);

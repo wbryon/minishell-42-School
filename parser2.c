@@ -166,7 +166,7 @@ char	*parser2(t_all *all)
 	int		i;
 	char	*str;
 
-	str = ft_strdup(all->history->current);
+	str = ft_strdup(all->command_buf);
 	i = -1;
 	while (str[++i])
 	{
