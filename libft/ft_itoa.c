@@ -1,72 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: felisabe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/06 07:03:23 by felisabe          #+#    #+#             */
+/*   Updated: 2021/04/16 14:13:48 by felisabe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int		char_count(int number)
+static size_t	ft_len(int nbr)
 {
-	int i;
+	size_t	len;
 
-	i = 0;
-	if (number == 0)
+	len = 0;
+	if (nbr == 0)
+		len++;
+	if (nbr < 0)
 	{
-		i++;
-		return (i);
+		nbr *= -1;
+		len++;
 	}
-	else if (number < 0)
+	while (nbr > 0)
 	{
-		i++;
-		number = -number;
+		nbr /= 10;
+		len++;
 	}
-	while (number > 0)
-	{
-		number = number / 10;
-		i++;
-	}
-	return (i);
+	return (len);
 }
 
-static	void	reverse_str(char *s, int sign, int x)
+char	*ft_itoa(int n)
 {
-	int		i;
-	int		j;
-	char	c;
+	char	*buff;
+	size_t	i;
 
-	i = 0;
-	if (sign < 0)
-	{
-		s[x++] = '-';
-		s[x] = '\0';
-	}
-	j = ft_strlen(s) - 1;
-	while (i < j)
-	{
-		c = s[i];
-		s[i] = s[j];
-		s[j] = c;
-		i++;
-		j--;
-	}
-}
-
-char			*ft_itoa(int n)
-{
-	int		i;
-	int		sign;
-	char	*str;
-
-	i = 0;
 	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	if (!(str = malloc(sizeof(char) * (char_count(n) + 1))))
+		return (buff = ft_strdup("-2147483648"));
+	i = ft_len(n);
+	buff = ft_calloc(sizeof(char), i + 1);
+	if (!buff)
 		return (NULL);
 	if (n == 0)
-		str[i++] = '0';
-	if ((sign = n) < 0)
-		n = -n;
+		buff[0] = '0';
+	if (n < 0)
+	{
+		buff[0] = '-';
+		n *= -1;
+	}
 	while (n > 0)
 	{
-		str[i++] = (n % 10) + '0';
+		buff[--i] = (n % 10) + '0';
 		n /= 10;
 	}
-	str[i] = '\0';
-	reverse_str(str, sign, i);
-	return (str);
+	return (buff);
 }

@@ -24,7 +24,7 @@ CFLAGS	=	-Wall -Wextra -Werror
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJS) $(LIBFT) $(INCL) libft/*.c
-			$(CC) -ltermcap $(OBJS) $(LIBFT) -o $(NAME)
+			$(CC) -ltermcap -lreadline $(OBJS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):	
 			make -C "libft"

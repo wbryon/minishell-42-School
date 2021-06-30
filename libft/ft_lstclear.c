@@ -1,16 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: felisabe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/08 18:32:26 by felisabe          #+#    #+#             */
+/*   Updated: 2021/04/16 14:16:39 by felisabe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
-	t_list *current;
-	t_list *next;
+	t_list	*tmp;
 
-	current = *lst;
-	while (current)
+	if (lst)
 	{
-		next = current->next;
-		ft_lstdelone(current, del);
-		current = next;
+		while (*lst)
+		{
+			tmp = (*lst)->next;
+			ft_lstdelone(*lst, del);
+			*lst = tmp;
+		}
+		*lst = NULL;
 	}
-	*lst = NULL;
 }

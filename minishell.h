@@ -15,6 +15,8 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "libft/libft.h"
 
 # define MAXSIZE		1024

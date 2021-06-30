@@ -1,37 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: felisabe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/10/29 13:00:43 by felisabe          #+#    #+#             */
+/*   Updated: 2021/04/29 01:50:42 by felisabe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
-
-int	sign_checker(const char *str)
-{
-	int sign;
-
-	sign = 1;
-	if (*str == '-')
-		sign = -sign;
-	return (sign);
-}
 
 int	ft_atoi(const char *str)
 {
-	unsigned long long	res;
-	int					sign;
+	int			dig;
+	int			sign;
+	long int	num;
 
-	res = 0;
+	num = 0;
 	sign = 1;
-	while ((*str >= 9 && *str <= 13) || *str == 32)
+	dig = 0;
+	while (*str && (*str == '\f' || *str == '\t' || *str == ' ' || \
+				*str == '\n' || *str == '\r' || *str == '\v'))
 		str++;
-	if (*str == '-' || *str == '+')
+	if (*str == '+' || *str == '-')
 	{
-		sign = sign_checker(str);
+		if (*str == '-')
+			sign = -1;
 		str++;
 	}
-	while (*str >= '0' && *str <= '9')
+	while (*str && ft_isdigit(*str))
 	{
-		res = (res * 10) + *str - '0';
+		num = num * 10 + (*str - '0');
+		dig++;
+		if (dig > 10 || (num * sign) > MAXINT || (num * sign) < MININT)
+			ft_error();
 		str++;
-		if (*str < '0' && *str > '9')
-			break ;
 	}
-	if (res >= 9223372036854775807)
-		res = (sign == -1) ? 0 : -1;
-	return ((int)res * sign);
+	return ((int)(num * sign));
 }

@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: felisabe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/29 10:50:28 by felisabe          #+#    #+#             */
-/*   Updated: 2020/11/10 19:45:05 by felisabe         ###   ########.fr       */
+/*   Created: 2021/04/29 00:53:35 by felisabe          #+#    #+#             */
+/*   Updated: 2021/04/29 16:22:05 by felisabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isalnum(int c)
+void	ft_error(void)
 {
-	if (ft_isalpha(c) || ft_isdigit(c))
-		return (1);
-	return (0);
+	write(1, "Error\n", 6);
+	exit(1);
 }
