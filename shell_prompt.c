@@ -21,48 +21,6 @@ int	init_termcap_functions(t_all *all)
 	return (0);
 }
 
-int	if_up_down_keys(t_all *all, char *buf)
-{
-    if (!ft_strcmp(buf, "\e[A"))//KEY UP
-	{
-		if (all->history->prev)
-		{
-			all->history = all->history->prev;
-			tputs(restore_cursor, 1, ft_putchar);
-			tputs(tgetstr("cd", 0), 1, ft_putchar);
-			ft_putstr_fd(all->history->current, 1);
-		}
-	}
-	else if (!ft_strcmp(buf, "\e[B"))//KEY DOWN
-	{
-		if (all->history->next)
-		{
-			all->history = all->history->next;
-			tputs(restore_cursor, 1, ft_putchar);
-			tputs(tgetstr("cd", 0), 1, ft_putchar);
-			ft_putstr_fd(all->history->current, 1);
-		}
-	}
-	return (0);
-}
-
-int	if_backspace(t_all *all, char *buf)
-{
-    if (!ft_strcmp(buf, "\177"))//BACKSPACE
-	{
-		int len = ft_strlen(all->history->current);
-		if (len > 0)
-		{
-			tputs(cursor_left, 1, ft_putchar);
-			tputs(delete_character, 1, ft_putchar);
-			all->history->current[len - 1] = '\0';
-		}
-	}
-	else if (!ft_strcmp(buf, "\011"))//TAB
-		tputs(cursor_normal, 1, ft_putchar);
-	return (0);
-}
-
 int		new_prompt(t_all *all)
 {
 	char	*tmp;
@@ -110,12 +68,6 @@ int		check_string(char *buf, t_all *all)
 		write_line_to_history(buf, all);
 		ft_putstr_fd(buf, 1);
 	}
-	else if (!ft_strcmp(buf, "\n"))
-		return (new_prompt(all));
-	else if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))
-		return (if_up_down_keys(all, buf));
-	else if (!ft_strcmp(buf, "\177"))
-		return (if_backspace(all, buf));
 	else if (!ft_strcmp(buf, "\3"))
 		return (ctrl_c(all));
 	else if (!ft_strcmp(buf, "\4"))

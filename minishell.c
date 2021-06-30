@@ -2,17 +2,15 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		ret;
-	char	*tmp;
-	char	buf[MAXSIZE];
 	int		i;
 	t_all	all;
-	char	*str;
+	// char	*str;
+	char	*command_buf;
+	char	*pwd;
 
 	(void)argv;
 	(void)argc;
 	ft_bzero(&all, sizeof(all));
-	tmp = NULL;
 	i = 0;
 	while (envp[i])
 		i++;
@@ -21,29 +19,30 @@ int	main(int argc, char **argv, char **envp)
 	while (envp[++i])
 		all.env[i] = ft_strdup(envp[i]);
 	all.env[i] = NULL;
+	pwd = 0;
+	pwd = getcwd(pwd, 0);
 	while (all.env)
 	{
 		init_vars(&all);
-		if (!all.history || (all.history && all.history->current[0] != '\0'))
-			add_line_to_history(&all.history, init_history_list(ft_strdup("")));
-		hist_move_to_end(&all);
-		init_termcap_functions(&all);
-		ft_putstr_fd("minishell> ", STDOUT);
-		tputs(save_cursor, 1, ft_putchar);
 		while (1)
 		{
-			ret = read(STDIN, &buf, BUFFER_SIZE);
-			buf[ret] = '\0';
-			if (check_string(buf, &all))
-				break ;
+			command_buf = readline("minishell> ");
+			if (ft_strlen(command_buf) > 0)
+				add_history(command_buf);
+			if (!ft_strcmp(command_buf, "exit"))
+				return (1);
+			else if (!ft_strcmp(command_buf, "\3"))
+				command_buf = readline("minishell> ");
+			// if (check_string(buf, &all))
+				// break ;
 		}
-		if (check_quotes(&all))
-		{
-			ft_putstr_fd("Syntax error: the number of quotes is odd!\n", STDOUT);
-			break ;
-		}
-		str = parser2(&all);
-		printf("|str_final=%s|\n", str);
+		// if (check_quotes(&all))
+		// {
+		// 	ft_putstr_fd("Syntax error: the number of quotes is odd!\n", STDOUT);
+		// 	break ;
+		// }
+		// str = parser2(&all);
+		// printf("|str_final=%s|\n", str);
 	}
 	return (0);
 }

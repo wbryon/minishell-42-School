@@ -38,14 +38,6 @@
 # define PIPE_ERROR 	"Pipe function is failed!"
 # define FORK_ERROR 	"Fork function is failed!"
 
-typedef struct s_history
-{
-	char				*current;
-	char				*prime;
-	struct s_history	*next;
-	struct s_history	*prev;
-}						t_history;
-
 typedef struct s_cmd
 {
 	char			*current;
@@ -70,7 +62,6 @@ typedef struct s_exec
 typedef struct s_all
 {
 	char			**env;
-	t_history		*history;
 	t_cmd			cmd;
 	t_exec			exec;
 	t_semicolon		s_c;
@@ -80,8 +71,6 @@ typedef struct s_all
 void		init_vars(t_all *all);
 void		get_history(char *buf, t_all *all);
 int			init_termcap_functions(t_all *all);
-t_history	*init_history_list(char *content);
-void		add_line_to_history(t_history **lst, t_history *new);
 void		hist_move_to_end(t_all *all);
 void		write_line_to_history(char *buf, t_all *all);
 int			check_string(char *buf, t_all *all);
