@@ -4,8 +4,8 @@ int	init_termcap_functions(t_all *all)
 {
 	struct termios	new_params;
 
-	//if (!isatty(0))
-		//ft_putstr_fd("not a terminal!\n", 1);
+	if (!isatty(0))
+		ft_putstr_fd("not a terminal!\n", 1);
 	if (tcgetattr(0, &all->params) == -1)
 		return (-1);
 	tcgetattr(0, &new_params);
@@ -23,7 +23,7 @@ int	init_termcap_functions(t_all *all)
 
 int	if_up_down_keys(t_all *all, char *buf)
 {
-    if (!ft_strcmp(buf, "\e[A"))//KEY UP
+    if (!ft_strcmp(buf, "\e[A"))
 	{
 		if (all->history->prev)
 		{
@@ -33,7 +33,7 @@ int	if_up_down_keys(t_all *all, char *buf)
 			ft_putstr_fd(all->history->current, 1);
 		}
 	}
-	else if (!ft_strcmp(buf, "\e[B"))//KEY DOWN
+	else if (!ft_strcmp(buf, "\e[B"))
 	{
 		if (all->history->next)
 		{
@@ -48,7 +48,7 @@ int	if_up_down_keys(t_all *all, char *buf)
 
 int	if_backspace(t_all *all, char *buf)
 {
-    if (!ft_strcmp(buf, "\177"))//BACKSPACE
+    if (!ft_strcmp(buf, "\177"))
 	{
 		int len = ft_strlen(all->history->current);
 		if (len > 0)
@@ -58,7 +58,7 @@ int	if_backspace(t_all *all, char *buf)
 			all->history->current[len - 1] = '\0';
 		}
 	}
-	else if (!ft_strcmp(buf, "\011"))//TAB
+	else if (!ft_strcmp(buf, "\011"))
 		tputs(cursor_normal, 1, ft_putchar);
 	return (0);
 }
@@ -97,7 +97,7 @@ int		ctrl_d(t_all *all)
 	if (*all->history->current == '\0')
 	{
 		tcsetattr(0, TCSANOW, &all->params);
-		//ft_putendl_fd("Exit from minishell", 1);
+		ft_putendl_fd("Exit from minishell", 1);
 		exit(0);
 	}
 	return (0);

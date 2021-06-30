@@ -13,13 +13,13 @@ void	check_s_quotes(t_all *all)
 		{
 			if (all->history->current[i - 1] && all->history->current[i - 1] == '\\')
 			{
-				if (all->s_c.s_quotes && all->s_c.s_quotes % 2 != 0)
-					all->s_c.s_quotes++;
+				if (all->command.s_quotes && all->command.s_quotes % 2 != 0)
+					all->command.s_quotes++;
 				else
 					continue ;
 			}
 			else
-				all->s_c.s_quotes++;
+				all->command.s_quotes++;
 		}
 	}
 }
@@ -35,13 +35,13 @@ void	check_d_quotes(t_all *all)
 		{
 			if (all->history->current[i - 1] && all->history->current[i - 1] == '\\')
 			{
-				if (all->s_c.d_quotes && all->s_c.d_quotes % 2 != 0)
-					all->s_c.d_quotes++;
+				if (all->command.d_quotes && all->command.d_quotes % 2 != 0)
+					all->command.d_quotes++;
 				else
 					continue ;
 			}
 			else
-				all->s_c.d_quotes++;
+				all->command.d_quotes++;
 		}
 	}
 }
@@ -50,7 +50,20 @@ int	check_quotes(t_all *all)
 {
 	check_s_quotes(all);
 	check_d_quotes(all);
-	if (all->s_c.s_quotes % 2 != 0 || all->s_c.d_quotes % 2 != 0)
+	if (all->command.s_quotes % 2 != 0 || all->command.d_quotes % 2 != 0)
 		return (1);
 	return (0);
 }
+
+// static int	validate_if(t_all *all, t_token *token, t_token *previous_token)
+// {
+// 	if (((token->type == '>' || token->type == -2 || token->type == '<')
+// 		&& (previous_token->type != -1 || token->next == NULL || token->next->type != -1))
+// 		|| (token->type == '|' && (previous_token->type != -1 || token->next == NULL || token->next->type != -1))
+// 		|| (token->type == ';' && previous_token->type != -1))
+// 	{
+// 		print_error_unexpctd_near_tok(all, token);
+// 		return (-1);
+// 	}
+// 	return (0);
+// }

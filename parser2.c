@@ -1,58 +1,85 @@
 #include "minishell.h"
 
-static char	*ft_slash(char *str, int *i)
+static char	*quote_substr(char *str, int j, int *i)
 {
-	char	*tmp;
-	char	*tmp2;
-	if (str[*i + 1] && str[*i + 1] == '\'')
-	{
-		tmp = ft_substr(str, 0, *i);
-		tmp2 = ft_strdup(str + *i + 1);
-		tmp = ft_strjoin(tmp, tmp2);
-		free(str);
-		++(*i);
-		return (tmp);
-	}
-	else
-	{
-		tmp = ft_strdup(str);
-		free(str);
-	}
-	return (tmp);
-}
-
-static char	*ft_squote(char *str, int *i)
-{
-	int		j;
 	char	*tmp;
 	char	*tmp2;
 	char	*tmp3;
 
-	j = *i;
-	while (str[++(*i)])
-	{
-		if (str[*i] == '\'')
-			break ;
-	}
 	tmp = ft_substr(str, 0, j);
-	//printf("|tmp=%s|\n", tmp);
 	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
-	//printf("|tmp2=%s|\n", tmp2);
 	tmp3 = tmp;
 	tmp = ft_strjoin(tmp, tmp2);
-	//printf("|tmp+tmp2=%s|\n", tmp);
 	free(tmp2);
 	free(tmp3);
 	tmp3 = ft_strdup(str + *i + 1);
-	//printf("|tmp3=%s|\n", tmp3);
 	tmp2 = tmp;
 	tmp = ft_strjoin(tmp, tmp3);
-	//printf("|tmp+tmp3=%s|\n", tmp);
 	free(tmp2);
 	free(tmp3);
 	free(str);
 	*i -= 2;
 	return (tmp);
+}
+
+static char	*ft_slash(t_all *all, char *str, int *i)
+{
+	char	*tmp;
+	char	*tmp2;
+
+	if (all->command.sq_flag == 0)
+	{
+		if (str[*i + 1])
+		{
+			all->command.slash_flag = 1;
+			tmp = ft_substr(str, 0, *i);
+			tmp2 = ft_strdup(str + *i + 1);
+			tmp = ft_strjoin(tmp, tmp2);
+			free(str);
+			free(tmp2);
+			++(*i);
+			return (tmp);
+		}
+		else
+		{
+			printf("slash is odd\n");
+			return (str);
+		}
+	}
+	else
+	{
+		++(*i);
+		tmp = ft_strdup(str);
+		free(str);
+		return (tmp);
+	}
+	return (tmp);
+}
+
+static char	*ft_squote(t_all *all, char *str, int *i)
+{
+	int	j;
+
+	j = *i;
+	all->command.sq_flag = 1;
+	while (str[++(*i)])
+	{
+		if (str[*i] == '\'')
+		{
+			if (all->command.slash_flag == 1)
+			{
+				if (str[*i - 1] == '\'')
+					all->command.sq_flag = 0;
+				break ;
+			}
+			else
+				break ;
+		}
+		else
+			return (quote_substr(str, j, i));
+		
+	}
+	return (quote_substr(str, j, i));
 }
 
 static int	ft_iskey(char c)
@@ -65,6 +92,7 @@ static int	ft_iskey(char c)
 static char	*ft_dollar(char *str, int *i, t_all *all)
 {
 	int		j;
+	int		k;
 	int		z;
 	int		len;
 	char	*tmp;
@@ -72,6 +100,7 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 	char	*tmp3;
 
 	j = *i;
+	k = -1;
 	len = 0;
 	while (str[++(*i)])
 	{
@@ -81,7 +110,6 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 	if (*i == j + 1)
 		return (str);
 	tmp = ft_substr(str, j + 1, *i - j - 1);
-	int k = -1;
 	while (all->env[++k])
 	{
 		if (strstr(all->env[k], tmp))
@@ -115,49 +143,29 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 	return (tmp);
 }
 
-static char	*ft_dquote(char *str, int *i, t_all *all)
+static char	*ft_dquote(t_all *all, char *str, int *i)
 {
 	int		j;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
 
 	j = *i;
-//	printf("i: %d\n", *i);
 	while (str[++(*i)])
 	{
-		if (str[*i] == '\\' && (str[*i + 1] == '\"' || str[*i + 1] == '$' || \
-		str[*i + 1] == '\\'))
-			str = ft_slash(str, i);
+		if (str[*i] == '\\' && (str[*i + 1] == '\"' || str[*i + 1] == '$' || str[*i + 1] == '\\'))
+			str = ft_slash(all, str, i);
 		if (str[*i] == '$')
 			str = ft_dollar(str, i, all);
 		if (str[*i] == '\"')
 			break;
 	}
-	tmp = ft_substr(str, 0, j);
-	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
-	tmp3 = tmp;
-	tmp = ft_strjoin(tmp, tmp2);
-	free(tmp2);
-	free(tmp3);
-	tmp3 = ft_strdup(str + *i + 1);
-	tmp2 = tmp;
-	tmp = ft_strjoin(tmp, tmp3);
-	free(tmp2);
-	free(tmp3);
-	free(str);
-	*i -= 2;
-	return (tmp);
+	return (quote_substr(str, j, i));
 }
 
 static	char *ft_semicolon(char *str, int *i, t_all *all)
 {
 	(void)str;
 	(void)i;
-	printf("sc: %d\n", all->s_c.count);
-//	all->s_c.semicolon[all->s_c.count] = ft_substr(str, 0, j);
-	all->s_c.count++;
-	printf("sc: %d\n", all->s_c.count);
+	all->command.semicolon[all->command.count] = ft_substr(str, 0, *i);
+	all->command.count++;
 	return (str);
 }
 
@@ -171,11 +179,15 @@ char	*parser2(t_all *all)
 	while (str[++i])
 	{
 		if (str[i] == '\'')
-			str = ft_squote(str, &i);
+		{
+			str = ft_squote(all, str, &i);
+		}
 		if (str[i] == '\"')
-			str = ft_dquote(str, &i, all);
+			str = ft_dquote(all, str, &i);
 		if (str[i] == '\\')
-			str = ft_slash(str, &i);
+		{
+			str = ft_slash(all, str, &i);
+		}
 		if (str[i] == '$')
 			str = ft_dollar(str, &i, all);
 		if (str[i] == ';')
@@ -189,3 +201,19 @@ char	*parser2(t_all *all)
 	while (str[++i])
 		do something
 }*/
+
+void	parse_semicolon(t_all *all, int *i)
+{
+	int	j;
+
+	j = *i;
+	while (all->history->current[++(*i)])
+	{
+		if (all->history->current[*i] == ';')
+		{
+			all->command.semicolon[all->command.count] = ft_substr(all->history->current, 0, j);
+			all->command.count++;
+			break ;
+		}
+	}
+}

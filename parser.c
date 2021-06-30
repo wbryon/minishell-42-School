@@ -1,69 +1,58 @@
 #include "minishell.h"
-char	*parser(t_all *all)
-{
-	int		i;
-	char	*tmp;
 
-	i = -1;
-	tmp = ft_strdup(all->history->current);
-	while (tmp[++i])
-	{
-		if (tmp[i] == '\'')
-		{
-			if (tmp[i - 1] && tmp[i - 1] == '\\')
-				continue ;
-			else
-				tmp = parse_quotes(tmp, &i);				
-		}
-	}
-	return (tmp);
-}
+// void	init_tokenizer(t_lexer *lexer, int size)
+// {
+// 	lexer->token_list = malloc(sizeof(t_token));
+// 	lexer->token = lexer->token_list;
+// 	token_init(lexer->token, size);
+// 	lexer->char_type = 0;
+// 	lexer->j = 0;
+// 	lexer->condition = 2;
+// 	lexer->size = size;
+// }
 
-char	*parse_quotes(char *str, int *i)
-{
-	int		j;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
+// int	tokenize(char *line, int size, t_lexer *lexer)
+// {
+// 	init_tokenizer(lexer, size);
+// 	while (*line)
+// 	{
+// 		get_char_type(&line, &lexer->char_type);
+// 		if (lexer->condition == 2)
+// 			if_status_general(lexer, &line);
+// 		else if (lexer->condition == 1)
+// 			if_status_quote(lexer, line);
+// 		else if (lexer->condition == 0)
+// 			if_status_dquote(lexer, &line);
+// 		if (lexer->char_type == '\0' || lexer->char_type == '\n')
+// 		{
+// 			if (lexer->j > 0)
+// 			{
+// 				lexer->token->data[lexer->j] = '\0';
+// 				lexer->j = 0;
+// 			}
+// 		}
+// 		if_last_char_is_not_zero_do_line_pp(&line);
+// 	}
+// 	return (set_and_return_num_of_tokens(lexer));
+// }
 
-	j = *i;
-	tmp = NULL;
-	while (str[++(*i)] != '\0')
-	{
-		if (str[*i] == '\'' && str[*i - 1] == '\'')
-		{
-			tmp = ft_strdup(str + *i);
-			*i = -1;
-			free(str);
-			return (tmp);
-		}
-		else if (str[*i] == '\'' && str[*i - 1] == '\\')
-			*i += 1;
-		if (str[*i] == '\'')
-			break ;
-	}
-	tmp = ft_substr(str, 0, j);
-	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
-	tmp3 = ft_strdup(str + *i + 1);
-	tmp = ft_strjoin(tmp, tmp2);
-	tmp = ft_strjoin(tmp, tmp3);
-	free(tmp2);
-	free(tmp3);
-	return (tmp);
-}
+// int	build_tokens(t_all *all, char *line, int size, t_lexer *lexer_list)
+// {
+// 	tokenize(line, size, lexer_list);
+// 	if (check_syntax(all, lexer_list->token_list))
+// 	{
+// 		lexer_destroy(all->lexer_buff);
+// 		all->parse_utils = malloc(sizeof(t_parse_utils));
+// 		return (-1);
+// 	}
+// 	all->parse_utils = malloc(sizeof(t_parse_utils));
+// 	all->parse_utils->current_token = all->lexer_buff->token_list;
+// 	return (0);
+// }
 
-void	parse_semicolon(t_all *all, int *i)
-{
-	int	j;
+// char	*parser(t_all *all)
+// {
+// 	tcsetattr(0, TCSANOW, &all->params);
 
-	j = *i;
-	while (all->history->current[++(*i)])
-	{
-		if (all->history->current[*i] == ';')
-		{
-			all->s_c.semicolon[all->s_c.count] = ft_substr(all->history->current, 0, j);
-			all->s_c.count++;
-			break ;
-		}
-	}
-}
+// 	return (NULL);
+// }

@@ -44,6 +44,24 @@ typedef struct s_history
 	struct s_history	*prev;
 }						t_history;
 
+enum e_token_type
+{
+	WHITESPACE = ' ',
+	SEMICOLON = ';',
+	QUOTE = '\'',
+	DQUOTE = '\"',
+	PIPE = '|',
+	ESCAPESEQ = '\\',
+	TAB = '\t',
+	NEWLINE = '\n',
+	MORE = '>',
+	LESS = '<',
+	DGREATER = -2,
+	ZERO = 0,
+	GENERAL = -1,
+	TOKEN = -1,
+};
+
 typedef struct s_cmd
 {
 	char			*current;
@@ -51,14 +69,46 @@ typedef struct s_cmd
 	struct s_cmd	*prev;
 }					t_cmd;
 
+typedef struct s_token
+{
+	char			*data;
+	int				type;
+	struct s_token	*next;
+}					t_token;
 
-typedef struct s_semicolon
+typedef struct s_pipelist
+{
+	t_token				*token_list;
+	struct s_pipelist	*next;
+}						t_pipelist;
+
+typedef struct s_lexer
+{
+	t_token	*token_list;
+	int		num_of_tokens;
+	int		char_type;
+	t_token	*token;
+	int		condition;
+	int		size;
+	int		j;
+}				t_lexer;
+
+typedef struct s_parse_utils
+{
+	t_pipelist	*pipelist;
+	t_token		*current_token;
+}				t_parse_utils;
+
+typedef struct s_command
 {
 	int		count;
+	int		slash_flag;
+	int		sq_flag;
+	int		dq_flag;
 	int		s_quotes;
 	int		d_quotes;
 	char	**semicolon;
-}			t_semicolon;
+}			t_command;
 
 typedef struct s_exec
 {
@@ -71,7 +121,9 @@ typedef struct s_all
 	t_history		*history;
 	t_cmd			cmd;
 	t_exec			exec;
-	t_semicolon		s_c;
+	t_command		command;
+	t_lexer			*lexer_buff;
+	t_parse_utils	*parse_utils;
 	struct termios	params;
 }					t_all;
 
@@ -93,4 +145,6 @@ void		check_s_quotes(t_all *all);
 int			check_quotes(t_all *all);
 void		parse_semicolon(t_all *all, int *i);
 char		*parse_quotes(char *str, int *i);
+char		**find_key(char **environ, char *key);
+int			prompt(t_all *all);
 #endif
