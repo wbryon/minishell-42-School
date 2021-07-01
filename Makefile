@@ -1,7 +1,8 @@
 SRCS	=	minishell.c\
 			init_vars.c\
 			check_syntax.c\
-			parser2.c
+			parser.c \
+			new_elem.c
 
 NAME	= minishell
 
@@ -16,6 +17,8 @@ CC		=	gcc
 RM		=	rm -f
 
 CFLAGS	=	-Wall -Wextra -Werror
+
+all:		$(NAME)
 
 %.o:		%.c
 			$(CC) $(CFLAGS) -c $< -o $@

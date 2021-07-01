@@ -40,11 +40,9 @@
 
 typedef struct s_cmd
 {
-	char			*current;
+	char			**args;
 	struct s_cmd	*next;
-	struct s_cmd	*prev;
 }					t_cmd;
-
 
 typedef struct s_semicolon
 {
@@ -54,16 +52,10 @@ typedef struct s_semicolon
 	char	**semicolon;
 }			t_semicolon;
 
-typedef struct s_exec
-{
-	char	*cmd;
-}			t_exec;
-
 typedef struct s_all
 {
 	char			**env;
 	t_cmd			cmd;
-	t_exec			exec;
 	t_semicolon		s_c;
 	struct termios	params;
 	char			*command_buf;
@@ -79,10 +71,11 @@ int			if_up_down_keys(t_all *all, char *buf);
 int			if_backspace(t_all *all, char *buf);
 int			ctrl_d(t_all *all);
 char		*parser(t_all *all);
-char		*parser2(t_all *all);
 void		check_d_quotes(t_all *all);
 void		check_s_quotes(t_all *all);
 int			check_quotes(t_all *all);
 void		parse_semicolon(t_all *all, int *i);
 char		*parse_quotes(char *str, int *i);
+t_cmd		*new_elem(char **args);
+void		elem_add_back(t_cmd **cmds, t_cmd *new);
 #endif

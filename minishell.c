@@ -6,6 +6,11 @@ int	main(int argc, char **argv, char **envp)
 	t_all	all;
 	char	*str;
 	char	*pwd;
+	char	**cmds;
+	char	**args;
+	t_cmd	*cmd;
+	t_cmd	*cmd_list;
+	t_cmd	*temp;
 
 	(void)argv;
 	(void)argc;
@@ -32,8 +37,29 @@ int	main(int argc, char **argv, char **envp)
 			add_history(all.command_buf);
 		if (!ft_strcmp(all.command_buf, "exit"))
 			return (1);
-		str = parser2(&all);
+		str = parser(&all);
 		printf("|str_final=%s|\n", str);
+		cmds = ft_split(str, ';');
+		i = -1;
+		while (cmds[++i])
+		{
+			printf("cmds[%d]: %s\n", i, cmds[i]);
+			args = ft_split(cmds[i], ' ');
+			cmd = new_elem(args);
+			if (!cmd)
+				exit(1);
+			elem_add_back(&cmd_list, cmd);
+			free(cmds[i]);
+		}
+		free(cmds);
+		temp = cmd_list;
+		while (temp)
+		{
+			i = -1;
+			while (temp->args[++i])
+				printf("temp[%d]: %s\n", i, temp->args[i]);
+			temp = temp->next;
+		}
 		// if (check_string(buf, &all))
 			// break ;
 	}
