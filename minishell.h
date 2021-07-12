@@ -46,6 +46,8 @@ typedef struct s_cmd
 
 typedef struct s_semicolon
 {
+	int		sq_flag;
+	int		dq_flag;
 	int		count;
 	int		s_quotes;
 	int		d_quotes;
