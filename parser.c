@@ -24,20 +24,23 @@ static char	*quote_substr(char *str, int j, int *i)
 
 static char	*ft_slash(char *str, int *i)
 {
+	int		j;
 	char	*tmp;
 	char	*tmp2;
-	if (str[*i + 1] && str[*i + 1] == '\'')
+	j = *i;
+	if (str[*i + 1] && (str[*i + 1] == '\'' || str[*i + 1] == '\"'
+	|| str[*i + 1] == '\\' || str[*i + 1] == '$'))
 	{
 		tmp = ft_substr(str, 0, *i);
 		tmp2 = ft_strdup(str + *i + 1);
 		tmp = ft_strjoin(tmp, tmp2);
 		free(str);
-		++(*i);
-		return (tmp);
 	}
 	else
 	{
-		tmp = ft_strdup(str);
+		tmp = ft_substr(str, 0, j);
+		tmp2 = ft_substr(str, j + 1, ft_strlen(str));
+		tmp = ft_strjoin(tmp, tmp2);
 		free(str);
 	}
 	return (tmp);
@@ -129,7 +132,6 @@ static char	*ft_dquote(char *str, int *i, t_all *all)
 	char	*tmp3;
 
 	j = *i;
-//	printf("i: %d\n", *i);
 	while (str[++(*i)])
 	{
 		if (str[*i] == '\\' && (str[*i + 1] == '\"' || str[*i + 1] == '$' || \
@@ -185,7 +187,9 @@ char	*parser(t_all *all)
 		if (str[i] == '\"')
 			str = ft_dquote(str, &i, all);
 		if (str[i] == '\\')
+		{
 			str = ft_slash(str, &i);
+		}
 		if (str[i] == '$')
 			str = ft_dollar(str, &i, all);
 		if (str[i] == ';')
