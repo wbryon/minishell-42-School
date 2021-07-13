@@ -43,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 		i = -1;
 		while (cmds[++i])
 		{
-			printf("cmds[%d]: %s\n", i, cmds[i]);
+			printf("cmds[%d]: |%s|\n", i, cmds[i]);
 			args = ft_split(cmds[i], ' ');
 			cmd = new_elem(args);
 			if (!cmd)
@@ -57,7 +57,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			i = -1;
 			while (temp->args[++i])
-				printf("temp[%d]: %s\n", i, temp->args[i]);
+				printf("temp[%d]: |%s|\n", i, temp->args[i]);
 			temp = temp->next;
 		}
 		// if (check_string(buf, &all))

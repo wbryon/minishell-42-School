@@ -1,6 +1,28 @@
 #include "minishell.h"
 
-static char	*quote_substr(char *str, int j, int *i)
+// static char	*trim_str(t_all *all, char *str, int j, int k, int z)
+// {
+// 	char	*tmp;
+// 	char	*tmp2;
+// 	char	*tmp3;
+
+// 	tmp2 = ft_strdup(all->env[k] + z + 1);
+// 	free(tmp);
+// 	tmp = ft_substr(str, 0, j);
+// 	tmp3 = tmp;
+// 	tmp = ft_strjoin(tmp, tmp2);
+// 	free(tmp2);
+// 	free(tmp3);
+// 	tmp2 = ft_strdup(str + j + ft_strlen(tmp) + 1);
+// 	tmp3 = tmp;
+// 	tmp = ft_strjoin(tmp, tmp2);
+// 	free(tmp2);
+// 	free(tmp3);
+// 	free(str);
+// 	return (tmp);
+// }
+
+static char	*trim_quotes(char *str, int j, int *i)
 {
 	char	*tmp;
 	char	*tmp2;
@@ -61,7 +83,7 @@ static char	*ft_squote(t_all *all, char *str, int *i)
 			break ;
 		}
 	}
-	return (quote_substr(str, j, i));
+	return (trim_quotes(str, j, i));
 }
 
 static int	ft_iskey(char c)
@@ -74,14 +96,14 @@ static int	ft_iskey(char c)
 static char	*ft_dollar(char *str, int *i, t_all *all)
 {
 	int		j;
+	int		k;
 	int		z;
-	int		len;
 	char	*tmp;
 	char	*tmp2;
 	char	*tmp3;
 
 	j = *i;
-	len = 0;
+	k = -1;
 	while (str[++(*i)])
 	{
 		if (!ft_iskey(str[*i]))
@@ -90,7 +112,6 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 	if (*i == j + 1)
 		return (str);
 	tmp = ft_substr(str, j + 1, *i - j - 1);
-	int k = -1;
 	while (all->env[++k])
 	{
 		if (strstr(all->env[k], tmp))
@@ -106,16 +127,17 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 			}
 			free(tmp2);
 		}
+		else
+			return (tmp);
 	}
-	len = ft_strlen(tmp);
-	tmp2 = ft_strdup(all->env[k] + z + 1);
 	free(tmp);
+	tmp2 = ft_strdup(all->env[k] + z + 1);
 	tmp = ft_substr(str, 0, j);
 	tmp3 = tmp;
 	tmp = ft_strjoin(tmp, tmp2);
 	free(tmp2);
 	free(tmp3);
-	tmp2 = ft_strdup(str + j + len + 1);
+	tmp2 = ft_strdup(str + j + ft_strlen(tmp) + 1);
 	tmp3 = tmp;
 	tmp = ft_strjoin(tmp, tmp2);
 	free(tmp2);
@@ -127,13 +149,12 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 static char	*ft_dquote(char *str, int *i, t_all *all)
 {
 	int		j;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
 
 	j = *i;
 	while (str[++(*i)])
 	{
+		if (str[j + 1] == '\"')
+			break ;
 		if (str[*i] == '\\' && (str[*i + 1] == '\"' || str[*i + 1] == '$' || \
 		str[*i + 1] == '\\'))
 			str = ft_slash(str, i);
@@ -142,20 +163,7 @@ static char	*ft_dquote(char *str, int *i, t_all *all)
 		if (str[*i] == '\"')
 			break;
 	}
-	tmp = ft_substr(str, 0, j);
-	tmp2 = ft_substr(str, j + 1, *i - (j + 1));
-	tmp3 = tmp;
-	tmp = ft_strjoin(tmp, tmp2);
-	free(tmp2);
-	free(tmp3);
-	tmp3 = ft_strdup(str + *i + 1);
-	tmp2 = tmp;
-	tmp = ft_strjoin(tmp, tmp3);
-	free(tmp2);
-	free(tmp3);
-	free(str);
-	*i -= 2;
-	return (tmp);
+	return (trim_quotes(str, j, i));
 }
 
 static	char *ft_semicolon(char *str, int *i, t_all *all)
