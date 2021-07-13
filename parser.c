@@ -1,27 +1,5 @@
 #include "minishell.h"
 
-// static char	*trim_str(t_all *all, char *str, int j, int k, int z)
-// {
-// 	char	*tmp;
-// 	char	*tmp2;
-// 	char	*tmp3;
-
-// 	tmp2 = ft_strdup(all->env[k] + z + 1);
-// 	free(tmp);
-// 	tmp = ft_substr(str, 0, j);
-// 	tmp3 = tmp;
-// 	tmp = ft_strjoin(tmp, tmp2);
-// 	free(tmp2);
-// 	free(tmp3);
-// 	tmp2 = ft_strdup(str + j + ft_strlen(tmp) + 1);
-// 	tmp3 = tmp;
-// 	tmp = ft_strjoin(tmp, tmp2);
-// 	free(tmp2);
-// 	free(tmp3);
-// 	free(str);
-// 	return (tmp);
-// }
-
 static char	*trim_quotes(char *str, int j, int *i)
 {
 	char	*tmp;
@@ -49,9 +27,10 @@ static char	*ft_slash(char *str, int *i)
 	int		j;
 	char	*tmp;
 	char	*tmp2;
+
 	j = *i;
 	if (str[*i + 1] && (str[*i + 1] == '\'' || str[*i + 1] == '\"'
-	|| str[*i + 1] == '\\' || str[*i + 1] == '$'))
+			|| str[*i + 1] == '\\' || str[*i + 1] == '$'))
 	{
 		tmp = ft_substr(str, 0, *i);
 		tmp2 = ft_strdup(str + *i + 1);
@@ -97,52 +76,29 @@ static char	*ft_dollar(char *str, int *i, t_all *all)
 {
 	int		j;
 	int		k;
-	int		z;
 	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
 
 	j = *i;
-	k = -1;
 	while (str[++(*i)])
 	{
 		if (!ft_iskey(str[*i]))
-			break;
+			break ;
 	}
 	if (*i == j + 1)
 		return (str);
 	tmp = ft_substr(str, j + 1, *i - j - 1);
-	while (all->env[++k])
+	j = -1;
+	while (all->env[++j])
 	{
-		if (strstr(all->env[k], tmp))
+		if (strstr(all->env[j], tmp))
 		{
-			z = 0;
-			while (all->env[k][z] && all->env[k][z] != '=')
-				z++;
-			tmp2 = ft_substr(all->env[k], 0, z);
-			if (!ft_strcmp(tmp, tmp2))
-			{
-				free(tmp2);
-				break ;
-			}
-			free(tmp2);
+			k = 0;
+			while (all->env[j][k] && all->env[j][k] != '=')
+				k++;
+			if (!ft_strcmp(tmp, ft_substr(all->env[j], 0, k)))
+				return (ft_strdup(all->env[j] + k + 1));
 		}
-		else
-			return (tmp);
 	}
-	free(tmp);
-	tmp2 = ft_strdup(all->env[k] + z + 1);
-	tmp = ft_substr(str, 0, j);
-	tmp3 = tmp;
-	tmp = ft_strjoin(tmp, tmp2);
-	free(tmp2);
-	free(tmp3);
-	tmp2 = ft_strdup(str + j + ft_strlen(tmp) + 1);
-	tmp3 = tmp;
-	tmp = ft_strjoin(tmp, tmp2);
-	free(tmp2);
-	free(tmp3);
-	free(str);
 	return (tmp);
 }
 
