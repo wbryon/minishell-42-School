@@ -60,6 +60,7 @@ int	main(int argc, char **argv, char **envp)
 				printf("temp[%d]: %s\n", i, temp->args[i]);
 			temp = temp->next;
 		}
+		// free_list(cmd_list);
 		// if (check_string(buf, &all))
 			// break ;
 	}

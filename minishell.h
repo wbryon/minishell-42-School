@@ -78,4 +78,5 @@ void		parse_semicolon(t_all *all, int *i);
 char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
 void		elem_add_back(t_cmd **cmds, t_cmd *new);
+void		free_list(t_cmd *list);
 #endif

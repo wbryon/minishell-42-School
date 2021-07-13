@@ -1,5 +1,24 @@
 #include "minishell.h"
 
+void    free_list(t_cmd *list)
+{
+    int     i;
+    t_cmd   *del;
+    t_cmd   *cur;
+
+    cur = list;
+    while (cur)
+    {
+        del = cur;
+        cur = cur->next;
+        i = -1;
+        while (del->args[++i])
+            free(del->args[i]);
+        free(del->args);
+        free(del);
+    }
+}
+
 static t_cmd   *elem_last(t_cmd *cmds)
 {
     if (cmds)
