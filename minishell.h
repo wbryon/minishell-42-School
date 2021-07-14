@@ -82,6 +82,6 @@ char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
 void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
-void		execute_cmd(t_all *all);
+void		exec_builtin(t_all *all);
 void		free_array(char **array);
 #endif

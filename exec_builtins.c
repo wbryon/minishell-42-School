@@ -89,11 +89,72 @@ void	free_array(char **array)
 	free(array);
 }
 
-static void    exec_export(t_all *all)
+static void	print_formatted_env(char *str)
+{
+	ft_putstr_fd("declare -x ", 1);
+	while (*str && *str != '=')
+		write(1, str++, 1);
+	if (*str == '=')
+	{
+		ft_putstr_fd("=\"", 1);
+		while (*(++str))
+			write(1, str, 1);
+		ft_putstr_fd("\"", 1);
+	}
+	write(1, "\n", 1);
+}
+
+static void	swap_env(char **str1, char **str2)
+{
+	char	*tmp;
+
+	tmp = *str1;
+	*str1 = *str2;
+	*str2 = tmp;
+}
+
+static char **sort_env(char **env)
+{
+	int	i;
+	int	j;
+	int	len;
+
+	i = 0;
+	while (env[i])
+		i++;
+	len = i;
+	i = -1;
+	while (++i < len)
+	{
+		j = -1;
+		while (++j < len - i - 1)
+			if (ft_strcmp(env[j], env[j + 1]) > 0)
+				swap_env(&env[j], &env[j + 1]);
+	}
+	return (env);
+}
+
+static int	print_env(t_all *all)
+{
+	int	i;
+	char	**copy;
+
+	copy = copy_env(all->env, NULL);
+	copy = sort_env(copy);
+	i = -1;
+	while (copy[++i])
+		print_formatted_env(copy[i]);
+	free_array(copy);
+	return (0);
+}
+
+static int	exec_export(t_all *all)
 {
 	int     i;
 	char    **tmp_env;
 
+	if (!all->cmd.args[1])
+		return (print_env(all));
 	i = 0;
 	while (all->cmd.args[++i])
 	{
@@ -101,26 +162,61 @@ static void    exec_export(t_all *all)
 		free_array(all->env);
 		all->env = tmp_env;
 	}
+	return (0);
 }
 
-static void    exec_unset()
+static void	delete_env(t_all *all, int target)
 {
+	int		i;
+	char	*tmp;
 
+	tmp = all->env[target];
+	i = 0;
+	while (all->env[i])
+		i++;
+	all->env[target] = all->env[i - 1];
+	all->env[i - 1] = NULL;
+	free(tmp);
 }
 
-static void    exec_cd()
+static void	unset_env(t_all *all, char *env)
 {
+	int	i;
+	int	idx;
 
+	idx = ft_strlen(env);
+	i = -1;
+	while (all->env[++i])
+	{
+		if (!ft_strncmp(all->env[i], env, idx) && \
+			(all->env[i][idx] == '=' || \
+			all->env[i][idx] == '\0'))
+			delete_env(all, i);
+	}
 }
 
-static void    exec_exit()
+static void    exec_unset(t_all *all)
 {
+	int	i;
 
+	i = 0;
+	while (all->cmd.args[++i])
+		unset_env(all, all->cmd.args[i]);
 }
 
-void execute_cmd(t_all *all)
+static void    exec_cd(t_all *all)
 {
 	(void)all;
+}
+
+static void    exec_exit(t_all *all)
+{
+	(void)all;
+	exit(0);
+}
+
+void exec_builtin(t_all *all)
+{
 	if (!ft_strcmp(all->cmd.args[0], "echo"))
 		execute_echo(all);
 	else if (!ft_strcmp(all->cmd.args[0], "env"))
@@ -130,9 +226,9 @@ void execute_cmd(t_all *all)
 	else if (!ft_strcmp(all->cmd.args[0], "export"))
 		exec_export(all);
 	else if (!ft_strcmp(all->cmd.args[0], "unset"))
-		exec_unset();
+		exec_unset(all);
 	else if (!ft_strcmp(all->cmd.args[0], "cd"))
-		exec_cd();
+		exec_cd(all);
 	else if (!ft_strcmp(all->cmd.args[0], "exit"))
-		exec_exit();
+		exec_exit(all);
 }
