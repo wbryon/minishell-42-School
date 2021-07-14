@@ -64,6 +64,7 @@ typedef struct s_all
 }					t_all;
 
 void		init_vars(t_all *all);
+char		**copy_env(char **env, char *str);
 void		get_history(char *buf, t_all *all);
 int			init_termcap_functions(t_all *all);
 void		hist_move_to_end(t_all *all);
@@ -81,4 +82,6 @@ char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
 void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
+void		execute_cmd(t_all *all);
+void		free_array(char **array);
 #endif
