@@ -195,6 +195,35 @@ static void	unset_env(t_all *all, char *env)
 	}
 }
 
+static int	search_env(t_all *all, char *key)
+{
+	int	i;
+	int	idx;
+
+	idx = ft_strlen(key);
+	i = -1;
+	while (all->env[++i])
+	{
+		if (!ft_strncmp(all->env[i], key, idx) && \
+			(all->env[i][idx] == '=' || \
+			all->env[i][idx] == '\0'))
+			return (i);
+	}
+	return (0);
+}
+
+static char	*get_env_value(t_all *all, char *key)
+{
+	char	*value;
+	char	*tmp;
+
+	tmp = all->env[search_env(all, key)];
+	value = ft_strchr(tmp, '=');
+	if (value && (value + 1))
+		return (++value);
+	return (NULL);
+}
+
 static void    exec_unset(t_all *all)
 {
 	int	i;
@@ -204,9 +233,40 @@ static void    exec_unset(t_all *all)
 		unset_env(all, all->cmd.args[i]);
 }
 
+static void	go_home(t_all *all)
+{
+	char	*homedir;
+
+	homedir = get_env_value(all, "HOME");
+	if (homedir)
+		chdir(homedir);
+}
+
+static void	go_back(t_all *all)
+{
+	char	*oldpwd;
+
+	oldpwd = get_env_value(all, "OLDPWD");
+	if (oldpwd)
+	{
+		ft_putendl_fd(oldpwd, 1);
+		chdir(oldpwd);
+	}
+}
+
 static void    exec_cd(t_all *all)
 {
-	(void)all;
+	if (all->cmd.args[1])
+	{
+		if (!ft_strcmp(all->cmd.args[1], "~"))
+			go_home(all);
+		else if (!ft_strcmp(all->cmd.args[1], "-"))
+			go_back(all);
+		else
+			chdir(all->cmd.args[1]);
+	}
+	else
+		go_home(all);
 }
 
 static void    exec_exit(t_all *all)
