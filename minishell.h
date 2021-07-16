@@ -84,4 +84,17 @@ void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
 void		exec_builtin(t_all *all);
 void		free_array(char **array);
+
+/*
+ * Builtins
+ */
+
+void	exec_echo(t_all *all);
+void    exec_env(t_all *all);
+void    exec_pwd(void);
+int		exec_export(t_all *all);
+void    exec_unset(t_all *all);
+void    exec_cd(t_all *all);
+void    exec_exit(t_all *all);
+
 #endif

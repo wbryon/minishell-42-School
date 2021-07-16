@@ -28,8 +28,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (ft_strlen(all.command_buf) > 0)
 			add_history(all.command_buf);
-		// if (!ft_strcmp(all.command_buf, "exit"))
-		// 	return (1);
 		str = parser(&all);
 		// printf("|str_final=%s|\n", str);
 		// cmds = ft_split(str, ';');
