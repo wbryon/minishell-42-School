@@ -14,23 +14,6 @@ static void	delete_env(t_all *all, int target)
 	free(tmp);
 }
 
-int	search_env(t_all *all, char *key)
-{
-	int	i;
-	int	idx;
-
-	idx = ft_strlen(key);
-	i = -1;
-	while (all->env[++i])
-	{
-		if (!ft_strncmp(all->env[i], key, idx) && \
-			(all->env[i][idx] == '=' || \
-			all->env[i][idx] == '\0'))
-			return (i);
-	}
-	return (-1);
-}
-
 void	exec_unset(t_all *all)
 {
 	int	i;

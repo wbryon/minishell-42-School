@@ -32,7 +32,7 @@ static void	set_env(t_all *all, char *key, char *value)
 	idx = search_env(all, key);
 	new = ft_strjoin(key, "=");
 	tmp = new;
-	new= ft_strjoin(new, value);
+	new = ft_strjoin(new, value);
 	free(tmp);
 	tmp = all->env[idx];
 	all->env[idx] = new;
@@ -74,7 +74,4 @@ void	exec_cd(t_all *all)
 		ret = go_home();
 	if (ret == 0)
 		update_env(all, oldpwd);
-	// path = getenv("PWD");
-	// setenv("OLDPWD", path, 1);
-	// printf("path: %s\n", path);
 }

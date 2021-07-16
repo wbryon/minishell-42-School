@@ -3,14 +3,15 @@ SRCS	=	minishell.c\
 			check_syntax.c\
 			parser.c \
 			new_elem.c \
-			exec_builtins.c \
+			exec_builtin.c \
 			builtins/exec_echo.c \
 			builtins/exec_env.c \
 			builtins/exec_pwd.c \
 			builtins/exec_export.c \
 			builtins/exec_unset.c \
 			builtins/exec_cd.c \
-			builtins/exec_exit.c
+			builtins/exec_exit.c \
+			utils.c
 
 NAME	= minishell
 
