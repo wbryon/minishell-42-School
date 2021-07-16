@@ -14,7 +14,7 @@ static void	delete_env(t_all *all, int target)
 	free(tmp);
 }
 
-static int	search_env(t_all *all, char *key)
+int	search_env(t_all *all, char *key)
 {
 	int	i;
 	int	idx;
@@ -28,7 +28,7 @@ static int	search_env(t_all *all, char *key)
 			all->env[i][idx] == '\0'))
 			return (i);
 	}
-	return (0);
+	return (-1);
 }
 
 void	exec_unset(t_all *all)
@@ -40,6 +40,7 @@ void	exec_unset(t_all *all)
 	while (all->cmd.args[++i])
 	{
 		target = search_env(all, all->cmd.args[i]);
-		delete_env(all, target);
+		if (target >= 0)
+			delete_env(all, target);
 	}
 }
