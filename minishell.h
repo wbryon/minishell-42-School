@@ -85,6 +85,7 @@ void		free_list(t_cmd *list);
 void		exec_builtin(t_all *all);
 void		free_array(char **array);
 int			search_env(t_all *all, char *key);
+int			exec_bin(t_all *all);
 
 /*
  * Builtins

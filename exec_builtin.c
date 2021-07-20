@@ -6,7 +6,7 @@ void	exec_builtin(t_all *all)
 		exec_echo(all);
 	else if (!ft_strcmp(all->cmd.args[0], "env"))
 		exec_env(all);
-	if (!ft_strcmp(all->cmd.args[0], "pwd"))
+	else if (!ft_strcmp(all->cmd.args[0], "pwd"))
 		exec_pwd();
 	else if (!ft_strcmp(all->cmd.args[0], "export"))
 		exec_export(all);
@@ -16,4 +16,6 @@ void	exec_builtin(t_all *all)
 		exec_cd(all);
 	else if (!ft_strcmp(all->cmd.args[0], "exit"))
 		exec_exit(all);
+	else
+		exec_bin(all);
 }

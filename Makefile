@@ -11,7 +11,8 @@ SRCS	=	minishell.c\
 			builtins/exec_unset.c \
 			builtins/exec_cd.c \
 			builtins/exec_exit.c \
-			utils.c
+			utils.c \
+			exec_bin.c
 
 NAME	= minishell
 
