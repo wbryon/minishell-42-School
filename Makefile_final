@@ -1,0 +1,61 @@
+SRCS_DIR 	=	./src/
+OBJS_DIR 	=	./objs/
+LIBFT_DIR 	=	./libft/
+INC_DIR 	=	./includes/
+
+SRCS_INC 	=	$(INC_DIR)minishell.h
+LINK_INC 	=	-I $(INC_DIR)
+
+SRCS		=	minishell.c\
+				init_vars.c\
+				check_syntax.c\
+				parser.c \
+				new_elem.c \
+				exec_builtin.c \
+				exec_echo.c \
+				exec_env.c \
+				exec_pwd.c \
+				exec_export.c \
+				exec_unset.c \
+				exec_cd.c \
+				exec_exit.c \
+				utils.c
+
+NAME		=	minishell
+LIBFT		=	libft.a
+
+OBJS_SRCS	= 	$(SRCS:.c=.o)
+OBJS		=	$(addprefix $(OBJS_DIR), $(OBJS_SRCS))
+
+INCL		=	minishell.h
+
+all:			$(LIBFT) $(NAME)
+
+CC			=	gcc
+RM			=	rm -rf
+CFLAGS		=	-Wall -Wextra -Werror
+
+$(NAME):		$(OBJS)
+				$(CC) $(OBJS) $(CFLAGS) libft/libft.a -ltermcap -lreadline -o $@
+
+$(LIBFT):	
+				make -C $(LIBFT_DIR)
+
+$(OBJS_DIR)%.o:	$(SRCS_DIR)%.c $(SRCS_INC)
+				@mkdir -p $(OBJS_DIR)
+				$(CC) $(CFLAGS) -I./includes -c $< -o $@
+
+$(OBJS_DIR)%.o:	%.c
+				$(CC) $(CFLAGS) -I./includes -c $< -o $@
+
+clean:		
+				$(RM) $(OBJS_DIR)
+				make clean -C $(LIBFT_DIR)
+
+fclean:			clean
+				$(RM) $(NAME)
+				make fclean -C $(LIBFT_DIR)
+
+re:				fclean all
+
+.PHONY:			all clean fclean re
