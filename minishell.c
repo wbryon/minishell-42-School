@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(all.command_buf);
 		str = parser(&all);
 		split_pipe(&all, str); // деление строк по пайпам
-		temp = all.pipe;
+		temp = all.begin;
 		while (temp)
 		{
 			args = split_redirect(&all, temp->pipe_list); // делим строку для получения команд и аргументов

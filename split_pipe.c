@@ -34,7 +34,10 @@ char	**split_redirect(t_all *all, char *str)
 				args = ft_splitset(str, " <\t");
 			}
 		}
+		else
+			args = ft_splitset(str, " \t");
 	}
+	printf("check\n");
 	return (args);
 }
 
@@ -43,14 +46,9 @@ int	split_pipe(t_all *all, char *str)
 	int		i;
 	char	**cmds;
 
-	i = -1;
-	cmds = NULL;
-	if (ft_strchr(str, '|'))
-	{
-		if (str[0] == '|')
-			ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
+	if (str[0] == '|')
+		ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
 		cmds = ft_split(str, '|');
-	}
 	i = -1;
 	while (cmds[++i])
 	{
