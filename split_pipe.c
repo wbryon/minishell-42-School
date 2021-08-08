@@ -45,12 +45,13 @@ int	split_pipe(t_all *all, char *str)
 
 	i = -1;
 	cmds = NULL;
-	if (ft_strchr("|", str[i]))
+	if (ft_strchr(str, '|'))
 	{
 		if (str[0] == '|')
 			ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
 		cmds = ft_split(str, '|');
 	}
+	i = -1;
 	while (cmds[++i])
 	{
 		all->pipe = new_pipe(cmds[i]);
