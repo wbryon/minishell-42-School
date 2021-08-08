@@ -32,7 +32,7 @@
 # define STDOUT 		1
 # define STDERR 		2
 
-# define SYNTAX_ERROR	"Syntax error: near unexpected token!"
+# define SYNTAX_ERROR	"Syntax error near unexpected token!"
 # define QUOTE_ERROR 	"The number of quotes is odd!"
 # define MALLOC_ERROR 	"Memory malloc fail!"
 # define PIPE_ERROR 	"Pipe function is failed!"
@@ -75,6 +75,7 @@ typedef struct s_all
 {
 	char			**env;
 	t_cmd			cmd;
+	t_pipe			*pipe;
 	t_parse			parse;
 	struct termios	params;
 	char			*command_buf;
@@ -103,13 +104,15 @@ char		*coder(char *str, int *i);
 void		decoder(char **str, int *i);
 char		*parser(t_all *all);
 char		**split_redirect(t_all *all, char *str);
-void		split_pipe(t_all *all, char *str);
+int			split_pipe(t_all *all, char *str);
 void		check_dquotes(t_all *all);
 int			check_quotes(t_all *all);
 int			quotes_checker(t_all *all);
 char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
+void    	pipe_add_back(t_pipe **cmds, t_pipe *new);
 t_pipe   	*new_pipe(char *cmd);
+void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
 void		exec_builtin(t_all *all);
 void		free_array(char **array);

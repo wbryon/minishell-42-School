@@ -7,7 +7,7 @@ int	main(int argc, char **argv, char **envp)
 	t_all	all;
 	char	*str;
 	char	*pwd;
-	char	**cmds;
+	//char	**cmds;
 	char	**args;
 	t_cmd	*cmd;
 	t_cmd	*cmd_list;
@@ -28,21 +28,20 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strlen(all.command_buf) > 0)
 			add_history(all.command_buf);
 		str = parser(&all);
-		printf("str=|%s|\n", str);
-		cmds = ft_split(str, '|'); // деление строк по пайпам
+		split_pipe(&all, str); // деление строк по пайпам
 		i = -1;
-		while (cmds[++i])
+		while (all.pipe->pipe_list[++i])
 		{
-			args = split_redirect(&all, cmds[i]); // делим строку для получения команд и аргументов
+			args = split_redirect(&all, &all.pipe->pipe_list[i]); // делим строку для получения команд и аргументов
 			cmd = new_elem(args); //записываем команды и арг-ты в список
 			printf("flag=|%d|\n", all.cmd.flag_red_out);
 			if (!cmd)
 				exit(1);
 			elem_add_back(&cmd_list, cmd);
-			free(cmds[i]);
+			//free(cmds[i]);
 			free(args);
 		}
-		free(cmds);
+		//free(cmds);
 		//temp = cmd_list;
 		while (cmd_list)
 		{

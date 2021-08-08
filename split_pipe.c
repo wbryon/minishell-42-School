@@ -38,19 +38,27 @@ char	**split_redirect(t_all *all, char *str)
 	return (args);
 }
 
-// void	split_pipe(t_all *all, char *str)
-// {
-// 	int		i;
-// 	char	**cmds;
+int	split_pipe(t_all *all, char *str)
+{
+	int		i;
+	char	**cmds;
 
-// 	i = -1;
-// 	cmds = ft_split(str, '|');
-// 	while (cmds[++i])
-// 	{
-// 		all->pipe = new_pipe(cmds[i]);
-// 		if (!all->pipe->pipe_list)
-// 			exit(1);
-// 		pipe_add_back(all->pipe->pipe_list, all->pipe);
-// 		free(cmds[i]);
-// 	}
-// }
+	i = -1;
+	cmds = NULL;
+	if (ft_strchr("|", str[i]))
+	{
+		if (str[0] == '|')
+			ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
+		cmds = ft_split(str, '|');
+	}
+	while (cmds[++i])
+	{
+		all->pipe = new_pipe(cmds[i]);
+		if (!all->pipe->pipe_list)
+			exit(1);
+		printf("list=|%s|\n", all->pipe->pipe_list);
+		//pipe_add_back(all->pipe->pipe_list, all->pipe);
+		free(cmds[i]);
+	}
+	return (0);
+}

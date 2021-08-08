@@ -53,3 +53,38 @@ t_cmd   *new_elem(char **args)
     }
     return (new);
 }
+
+static t_pipe   *pipe_last(t_pipe *cmds)
+{
+    if (cmds)
+    {
+        while (cmds->next)
+            cmds = cmds->next;
+        return (cmds);
+    }
+    return (NULL);
+}
+
+void    pipe_add_back(t_pipe **cmds, t_pipe *new)
+{
+    t_pipe   *last;
+
+    last = pipe_last(*cmds);
+    if (last)
+        last->next = new;
+    else
+        *cmds = new;
+}
+
+t_pipe   *new_pipe(char *cmd)
+{
+    t_pipe   *new;
+
+    new = malloc(sizeof(t_pipe));
+    if (new)
+    {
+        new->pipe_list = cmd;
+        new->next = NULL;
+    }
+    return (new);
+}
