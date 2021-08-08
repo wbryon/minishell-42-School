@@ -41,7 +41,6 @@
 typedef	struct s_pipe
 {
 	char			*pipe_list;
-	int				data;
 	struct s_pipe	*next;
 		
 }				t_pipe;
@@ -75,6 +74,7 @@ typedef struct s_all
 {
 	char			**env;
 	t_cmd			cmd;
+	t_pipe			*begin;
 	t_pipe			*pipe;
 	t_parse			parse;
 	struct termios	params;

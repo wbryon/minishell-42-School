@@ -54,10 +54,9 @@ int	split_pipe(t_all *all, char *str)
 	while (cmds[++i])
 	{
 		all->pipe = new_pipe(cmds[i]);
-		if (!all->pipe->pipe_list)
+		if (!all->pipe)
 			exit(1);
-		printf("list=|%s|\n", all->pipe->pipe_list);
-		//pipe_add_back(all->pipe->pipe_list, all->pipe);
+		pipe_add_back(&all->begin, all->pipe);
 		free(cmds[i]);
 	}
 	return (0);

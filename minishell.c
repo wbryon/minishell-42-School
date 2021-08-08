@@ -7,11 +7,11 @@ int	main(int argc, char **argv, char **envp)
 	t_all	all;
 	char	*str;
 	char	*pwd;
-	//char	**cmds;
 	char	**args;
 	t_cmd	*cmd;
 	t_cmd	*cmd_list;
-	//t_cmd	*temp;
+	t_cmd	*temp_cmd;
+	t_pipe	*temp;
 
 	(void)argv;
 	(void)argc;
@@ -29,34 +29,28 @@ int	main(int argc, char **argv, char **envp)
 			add_history(all.command_buf);
 		str = parser(&all);
 		split_pipe(&all, str); // деление строк по пайпам
-		i = -1;
-		while (all.pipe->pipe_list[++i])
+		temp = all.pipe;
+		while (temp)
 		{
-			args = split_redirect(&all, &all.pipe->pipe_list[i]); // делим строку для получения команд и аргументов
+			args = split_redirect(&all, temp->pipe_list); // делим строку для получения команд и аргументов
 			cmd = new_elem(args); //записываем команды и арг-ты в список
-			printf("flag=|%d|\n", all.cmd.flag_red_out);
 			if (!cmd)
 				exit(1);
 			elem_add_back(&cmd_list, cmd);
-			//free(cmds[i]);
 			free(args);
+			temp = temp->next;
 		}
-		//free(cmds);
-		//temp = cmd_list;
-		while (cmd_list)
+		temp_cmd = cmd_list;
+		while (temp_cmd)
 		{
 			i = -1;
-			while (cmd_list->args[++i])
+			while (temp_cmd->args[++i])
 			{
-				printf("args_before[%d]=|%s|\n", i, cmd_list->args[i]);
 				j = -1;
-				while (cmd_list->args[i][++j])
-				{
-					decoder(&cmd_list->args[i], &j);
-					printf("args[%d]=|%s|\n", i, cmd_list->args[i]);
-				}
+				while (temp_cmd->args[i][++j])
+					decoder(&temp_cmd->args[i], &j);
 			}
-			cmd_list = cmd_list->next;
+			temp_cmd = temp_cmd->next;
 		}
 		// exec_builtin(&all);
 		// free_list(cmd_list);
