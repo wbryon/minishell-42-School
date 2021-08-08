@@ -38,30 +38,56 @@
 # define PIPE_ERROR 	"Pipe function is failed!"
 # define FORK_ERROR 	"Fork function is failed!"
 
+typedef	struct s_pipe
+{
+	char			*pipe_list;
+	int				data;
+	struct s_pipe	*next;
+		
+}				t_pipe;
+
+typedef struct s_token
+{
+	char			*data;
+	int				type;
+	struct s_token	*next;
+}					t_token;
+
 typedef struct s_cmd
 {
 	char			**args;
+	int				flag_d_red_out;
+	int				flag_red_out;
+	int				flag_d_red_in;
+	int				flag_red_in;
 	struct s_cmd	*next;
 }					t_cmd;
 
-typedef struct s_semicolon
+typedef struct s_parse
 {
-	int		sq_flag;
-	int		dq_flag;
+	int		flag;
 	int		count;
-	int		s_quotes;
-	int		d_quotes;
-	char	**semicolon;
-}			t_semicolon;
+	int		quotes;
+	int		dquotes;
+}			t_parse;
 
 typedef struct s_all
 {
 	char			**env;
 	t_cmd			cmd;
-	t_semicolon		s_c;
+	t_parse			parse;
 	struct termios	params;
 	char			*command_buf;
 }					t_all;
+
+enum e_char
+{
+	DOLLAR = -5,
+	REDIR_IN,
+	REDIR_OUT,
+	PIPE,
+	SPACE,
+};
 
 void		init_vars(t_all *all);
 char		**copy_env(char **env, char *str);
@@ -73,14 +99,17 @@ int			check_string(char *buf, t_all *all);
 int			if_up_down_keys(t_all *all, char *buf);
 int			if_backspace(t_all *all, char *buf);
 int			ctrl_d(t_all *all);
+char		*coder(char *str, int *i);
+void		decoder(char **str, int *i);
 char		*parser(t_all *all);
-void		check_d_quotes(t_all *all);
-void		check_s_quotes(t_all *all);
+char		**split_redirect(t_all *all, char *str);
+void		split_pipe(t_all *all, char *str);
+void		check_dquotes(t_all *all);
 int			check_quotes(t_all *all);
-void		parse_semicolon(t_all *all, int *i);
+int			quotes_checker(t_all *all);
 char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
-void		elem_add_back(t_cmd **cmds, t_cmd *new);
+t_pipe   	*new_pipe(char *cmd);
 void		free_list(t_cmd *list);
 void		exec_builtin(t_all *all);
 void		free_array(char **array);

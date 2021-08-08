@@ -1,56 +1,39 @@
 #include "minishell.h"
 
-void	check_s_quotes(t_all *all)
-{
-	int	i;
-	int	s_quotes;
-
-	i = -1;
-	s_quotes = 0;
-	while (all->command_buf[++i] != '\0')
-	{
-		if (all->command_buf[i] == '\'')
-		{
-			if (all->command_buf[i - 1] && all->command_buf[i - 1] == '\\')
-			{
-				if (all->s_c.s_quotes && all->s_c.s_quotes % 2 != 0)
-					all->s_c.s_quotes++;
-				else
-					continue ;
-			}
-			else
-				all->s_c.s_quotes++;
-		}
-	}
-}
-
-void	check_d_quotes(t_all *all)
-{
-	int	i;
-
-	i = -1;
-	while (all->command_buf[++i] != '\0')
-	{
-		if (all->command_buf[i] == '"')
-		{
-			if (all->command_buf[i - 1] && all->command_buf[i - 1] == '\\')
-			{
-				if (all->s_c.d_quotes && all->s_c.d_quotes % 2 != 0)
-					all->s_c.d_quotes++;
-				else
-					continue ;
-			}
-			else
-				all->s_c.d_quotes++;
-		}
-	}
-}
-	
 int	check_quotes(t_all *all)
 {
-	check_s_quotes(all);
-	check_d_quotes(all);
-	if (all->s_c.s_quotes % 2 != 0 || all->s_c.d_quotes % 2 != 0)
+	int	i;
+
+	i = -1;
+	while (all->command_buf[++i])
+	{
+		if (all->command_buf[i] == '\'')
+			all->parse.quotes++;
+		else if (all->command_buf[i] == '"')
+			all->parse.dquotes++;
+	}
+	if (all->parse.quotes % 2 != 0 || all->parse.dquotes % 2 != 0)
 		return (1);
 	return (0);
 }
+
+// void	check_dquotes(t_all *all)
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (all->command_buf[++i])
+// 	{
+// 		if (all->command_buf[i] == '"')
+// 			all->parse.dquotes++;
+// 	}
+// }
+	
+// int	quotes_checker(t_all *all)
+// {
+// 	check_squotes(all);
+// 	check_dquotes(all);
+// 	if (all->parse.quotes % 2 != 0 || all->parse.dquotes % 2 != 0)
+// 		return (1);
+// 	return (0);
+// }

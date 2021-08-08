@@ -1,7 +1,9 @@
 SRCS	=	minishell.c\
 			init_vars.c\
 			check_syntax.c\
+			replace_char.c\
 			parser.c \
+			split_pipe.c\
 			new_elem.c \
 			exec_builtin.c \
 			builtins/exec_echo.c \
@@ -34,7 +36,7 @@ all:		$(NAME)
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJS) $(LIBFT) $(INCL) libft/*.c
-			$(CC) -ltermcap -lreadline $(OBJS) $(LIBFT) -o $(NAME)
+			$(CC) -ltermcap -g -lreadline $(OBJS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):	
 			make -C "libft"

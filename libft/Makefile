@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: felisabe <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/11/10 16:43:28 by felisabe          #+#    #+#              #
-#    Updated: 2021/04/29 00:57:48 by felisabe         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 SRCS	=	ft_memset.c			\
 			ft_bzero.c			\
 			ft_memcpy.c			\
@@ -39,6 +27,7 @@ SRCS	=	ft_memset.c			\
 			ft_strjoin.c		\
 			ft_strtrim.c		\
 			ft_split.c			\
+			ft_splitset.c		\
 			ft_itoa.c			\
 			ft_strmapi.c		\
 			ft_putchar_fd.c		\

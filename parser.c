@@ -22,32 +22,7 @@ static char	*trim_quotes(char *str, int j, int *i)
 	return (tmp);
 }
 
-static char	*ft_slash(char *str, int *i)
-{
-	int		j;
-	char	*tmp;
-	char	*tmp2;
-
-	j = *i;
-	if (str[*i + 1] && (str[*i + 1] == '\'' || str[*i + 1] == '\"'
-			|| str[*i + 1] == '\\' || str[*i + 1] == '$'))
-	{
-		tmp = ft_substr(str, 0, *i);
-		tmp2 = ft_strdup(str + *i + 1);
-		tmp = ft_strjoin(tmp, tmp2);
-		free(str);
-	}
-	else
-	{
-		tmp = ft_substr(str, 0, j);
-		tmp2 = ft_substr(str, j + 1, ft_strlen(str));
-		tmp = ft_strjoin(tmp, tmp2);
-		free(str);
-	}
-	return (tmp);
-}
-
-static char	*ft_squote(t_all *all, char *str, int *i)
+static char	*ft_quote(char *str, int *i)
 {
 	int	j;
 
@@ -56,11 +31,9 @@ static char	*ft_squote(t_all *all, char *str, int *i)
 	{
 		if (str[j + 1] == '\'')
 			break ;
+		coder(str, i);
 		if (str[*i] == '\'')
-		{
-			all->s_c.sq_flag = 1;
 			break ;
-		}
 	}
 	return (trim_quotes(str, j, i));
 }
@@ -111,26 +84,13 @@ static char	*ft_dquote(char *str, int *i, t_all *all)
 	{
 		if (str[j + 1] == '\"')
 			break ;
-		if (str[*i] == '\\' && (str[*i + 1] == '\"' || str[*i + 1] == '$' || \
-		str[*i + 1] == '\\'))
-			str = ft_slash(str, i);
 		if (str[*i] == '$')
 			str = ft_dollar(str, i, all);
+		coder(str, i);
 		if (str[*i] == '\"')
-			break;
+			break ;
 	}
 	return (trim_quotes(str, j, i));
-}
-
-static	char *ft_semicolon(char *str, int *i, t_all *all)
-{
-	(void)str;
-	(void)i;
-	// printf("sc: %d\n", all->s_c.count);
-//	all->s_c.semicolon[all->s_c.count] = ft_substr(str, 0, j);
-	all->s_c.count++;
-	// printf("sc: %d\n", all->s_c.count);
-	return (str);
 }
 
 char	*parser(t_all *all)
@@ -144,26 +104,15 @@ char	*parser(t_all *all)
 	{
 		if (str[i] == '\'')
 		{
-			all->s_c.sq_flag = 1;
-			str = ft_squote(all, str, &i);
+			str = ft_quote(str, &i);
 			continue ;
 		}
 		if (str[i] == '\"')
-			str = ft_dquote(str, &i, all);
-		if (str[i] == '\\')
 		{
-			str = ft_slash(str, &i);
+			str = ft_dquote(str, &i, all);
 		}
 		if (str[i] == '$')
 			str = ft_dollar(str, &i, all);
-		if (str[i] == ';')
-			str = ft_semicolon(str, &i, all);
 	}
 	return (str);
 }
-
-/*int	preparser(char *str)
-{
-	while (str[++i])
-		do something
-}*/
