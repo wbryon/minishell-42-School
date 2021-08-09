@@ -83,7 +83,7 @@ t_pipe   *new_pipe(char *cmd)
     new = malloc(sizeof(t_pipe));
     if (new)
     {
-        new->pipe_list = cmd;
+        new->pipe_list = ft_strdup(cmd);
         new->next = NULL;
     }
     return (new);
