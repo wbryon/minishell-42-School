@@ -36,7 +36,7 @@ all:		$(NAME)
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJS) $(LIBFT) $(INCL) libft/*.c
-			$(CC) -ltermcap -lreadline $(OBJS) $(LIBFT) -o $(NAME)
+			$(CC) -ltermcap -g -lreadline $(OBJS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):	
 			make -C "libft"

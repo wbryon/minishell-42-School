@@ -11,7 +11,7 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd	*cmd;
 	t_cmd	*cmd_list;
 	t_cmd	*temp_cmd;
-	t_pipe	*temp;
+	t_token	*temp;
 
 	(void)argv;
 	(void)argc;
@@ -32,7 +32,8 @@ int	main(int argc, char **argv, char **envp)
 		temp = all.begin;
 		while (temp)
 		{
-			args = split_redirect(&all, temp->pipe_list); // делим строку для получения команд и аргументов
+			printf("pipe=|%s|\n", temp->token_list); //здесь повторяется предыдущая строка! 
+			args = split_redirect(&all, temp->token_list); // делим строку для получения команд и аргументов
 			cmd = new_elem(args); //записываем команды и арг-ты в список
 			if (!cmd)
 				exit(1);
