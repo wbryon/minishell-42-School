@@ -38,19 +38,12 @@
 # define PIPE_ERROR 	"Pipe function is failed!"
 # define FORK_ERROR 	"Fork function is failed!"
 
-typedef	struct s_pipe
+typedef	struct s_token
 {
-	char			*pipe_list;
-	struct s_pipe	*next;
-		
-}				t_pipe;
-
-typedef struct s_token
-{
-	char			*data;
-	int				type;
+	char			*token_list;
 	struct s_token	*next;
-}					t_token;
+		
+}				t_token;
 
 typedef struct s_cmd
 {
@@ -74,8 +67,8 @@ typedef struct s_all
 {
 	char			**env;
 	t_cmd			cmd;
-	t_pipe			*begin;
-	t_pipe			*pipe;
+	t_token			*begin;
+	t_token			*token;
 	t_parse			parse;
 	struct termios	params;
 	char			*command_buf;
@@ -110,8 +103,8 @@ int			check_quotes(t_all *all);
 int			quotes_checker(t_all *all);
 char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
-void    	pipe_add_back(t_pipe **cmds, t_pipe *new);
-t_pipe   	*new_pipe(char *cmd);
+void    	pipe_add_back(t_token **cmds, t_token *new);
+t_token   	*new_pipe(char *cmd);
 void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
 void		exec_builtin(t_all *all);
