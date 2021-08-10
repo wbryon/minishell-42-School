@@ -19,7 +19,7 @@ char	*ft_strchr(const char *str, int c)
 		else
 			str++;
 	}
-	if (*str == c)
-		return ((char *)str);
-	return (0);
+	if (*str == (char)c)
+		return ((void *)str);
+	return (NULL);
 }
