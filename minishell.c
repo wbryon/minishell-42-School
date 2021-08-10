@@ -41,7 +41,6 @@ int	main(int argc, char **argv, char **envp)
 			free(args);
 			temp = temp->next;
 		}
-		free_token_list(temp);
 		temp_cmd = cmd_list;
 		// while (temp_cmd)
 		// {
