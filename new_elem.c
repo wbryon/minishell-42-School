@@ -54,7 +54,7 @@ t_cmd   *new_elem(char **args)
     return (new);
 }
 
-static t_pipe   *pipe_last(t_pipe *cmds)
+static t_token   *pipe_last(t_token *cmds)
 {
     if (cmds)
     {
@@ -65,9 +65,9 @@ static t_pipe   *pipe_last(t_pipe *cmds)
     return (NULL);
 }
 
-void    pipe_add_back(t_pipe **cmds, t_pipe *new)
+void    pipe_add_back(t_token **cmds, t_token *new)
 {
-    t_pipe   *last;
+    t_token   *last;
 
     last = pipe_last(*cmds);
     if (last)
@@ -76,14 +76,14 @@ void    pipe_add_back(t_pipe **cmds, t_pipe *new)
         *cmds = new;
 }
 
-t_pipe   *new_pipe(char *cmd)
+t_token   *new_pipe(char *cmd)
 {
-    t_pipe   *new;
+    t_token   *new;
 
-    new = malloc(sizeof(t_pipe));
+    new = malloc(sizeof(t_token));
     if (new)
     {
-        new->pipe_list = ft_strdup(cmd);
+        new->token_list = ft_strdup(cmd);
         new->next = NULL;
     }
     return (new);
