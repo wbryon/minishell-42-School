@@ -20,9 +20,9 @@ void	exec_unset(t_all *all)
 	int	target;
 
 	i = 0;
-	while (all->cmd.args[++i])
+	while (all->cmd->args[++i])
 	{
-		target = search_env(all, all->cmd.args[i]);
+		target = search_env(all, all->cmd->args[i]);
 		if (target >= 0)
 			delete_env(all, target);
 	}

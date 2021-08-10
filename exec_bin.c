@@ -16,11 +16,11 @@ static void	get_path(t_all *all, char **path, char **splitted)
 		entity = readdir(dir);
 		while (entity)
 		{
-			if (!ft_strcmp(entity->d_name, all->cmd.args[0]))
+			if (!ft_strcmp(entity->d_name, all->cmd->args[0]))
 			{
 				*path = ft_strjoin(splitted[i], "/");
 				tmp = *path;
-				*path = ft_strjoin(*path, all->cmd.args[0]);
+				*path = ft_strjoin(*path, all->cmd->args[0]);
 				free(tmp);
 			}
 			entity = readdir(dir);
@@ -51,10 +51,10 @@ int	exec_bin(t_all *all)
 	char	*path;
 	pid_t	pid;
 
-	if (!all->cmd.args[0])
+	if (!all->cmd->args[0])
 		return (5);
-	if (ft_strchr("./", all->cmd.args[0][0]))
-		path = ft_strdup(all->cmd.args[0]);
+	if (ft_strchr("./", all->cmd->args[0][0]))
+		path = ft_strdup(all->cmd->args[0]);
 	else
 		path = try_path(all);
 	if (path)
@@ -63,7 +63,7 @@ int	exec_bin(t_all *all)
 		if (pid == -1)
 			return (4);
 		if (pid == 0)
-			execve(path, all->cmd.args, all->env);
+			execve(path, all->cmd->args, all->env);
 		else
 			wait(NULL);
 	}

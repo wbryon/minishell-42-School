@@ -61,14 +61,14 @@ void	exec_cd(t_all *all)
 
 	oldpwd = NULL;
 	oldpwd = getcwd(oldpwd, 0);
-	if (all->cmd.args[1])
+	if (all->cmd->args[1])
 	{
-		if (!ft_strcmp(all->cmd.args[1], "~"))
+		if (!ft_strcmp(all->cmd->args[1], "~"))
 			ret = go_home();
-		else if (!ft_strcmp(all->cmd.args[1], "-"))
+		else if (!ft_strcmp(all->cmd->args[1], "-"))
 			ret = go_back();
 		else
-			ret = chdir(all->cmd.args[1]);
+			ret = chdir(all->cmd->args[1]);
 	}
 	else
 		ret = go_home();

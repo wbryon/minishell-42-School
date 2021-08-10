@@ -67,12 +67,12 @@ int	exec_export(t_all *all)
 	int		i;
 	char	**copy;
 
-	if (!all->cmd.args[1])
+	if (!all->cmd->args[1])
 		return (print_env(all));
 	i = 0;
-	while (all->cmd.args[++i])
+	while (all->cmd->args[++i])
 	{
-		copy = copy_env(all->env, all->cmd.args[i]);
+		copy = copy_env(all->env, all->cmd->args[i]);
 		free_array(all->env);
 		all->env = copy;
 	}

@@ -11,12 +11,12 @@ char	**split_redirect(t_all *all, char *str)
 		ptr = ft_strchr(str, '>');
 		if (*(ptr + 1) == '>')
 		{
-			all->cmd.flag_d_red_out = 1;
+			all->flags.flag_d_red_out = 1;
 			args = ft_splitset(str, " >\t");
 		}
 		else
 		{
-			all->cmd.flag_red_out = 1;
+			all->flags.flag_red_out = 1;
 			args = ft_splitset(str, " >\t");
 		}
 	}
@@ -25,12 +25,12 @@ char	**split_redirect(t_all *all, char *str)
 		ptr = ft_strchr(str, '<');
 		if (*(ptr + 1) == '<')
 		{
-			all->cmd.flag_d_red_out = 1;
+			all->flags.flag_d_red_out = 1;
 			args = ft_splitset(str, " <\t");
 		}
 		else
 		{
-			all->cmd.flag_red_out = 1;
+			all->flags.flag_red_out = 1;
 			args = ft_splitset(str, " <\t");
 		}
 	}
@@ -42,19 +42,28 @@ char	**split_redirect(t_all *all, char *str)
 int	split_pipe(t_all *all, char *str)
 {
 	int		i;
-	char	**cmds;
+	char	**pipes;
+	char	**args;
+	t_cmd	*new;
 
 	if (str[0] == '|')
 		ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
-		cmds = ft_split(str, '|');
-	i = -1;
-	while (cmds[++i])
+	pipes = ft_split(str, '|');
+	if (all->cmd)
 	{
-		all->token = new_pipe(cmds[i]);
-		if (!all->token)
-			exit(1);
-		pipe_add_back(&all->begin, all->token);
-		free(cmds[i]);
+		free_list(all->cmd);
+		all->cmd = NULL;
 	}
+	i = -1;
+	while (pipes[++i])
+	{
+		args = ft_split(pipes[i], ' ');
+		new = new_elem(args);
+		if (!new)
+			exit(1);
+		elem_add_back(&all->cmd, new);
+		free(pipes[i]);
+	}
+	free(pipes);
 	return (0);
 }
