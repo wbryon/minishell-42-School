@@ -51,3 +51,20 @@ char	**copy_env(char **env, char *str)
 	free(new_env);
 	return (copy);
 }
+
+char    *ft_trim_spase_tab(char *str)
+{
+    char    *tmp;
+    while (str[0] == ' ' || str[0] == '\t' ||
+            str[ft_strlen(str) - 1] == ' ' ||
+            str[ft_strlen(str) - 1] == '\t')
+    {
+        tmp = str;
+        if (str[0] == ' ' || str[ft_strlen(str) - 1] == ' ')
+            str = ft_strtrim(str, " ");
+        if (str[0] == '\t' || str[ft_strlen(str) - 1] == '\t')
+            str = ft_strtrim(str, "\t");
+        free(tmp);
+    }
+    return (str);
+}

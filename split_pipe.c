@@ -3,39 +3,47 @@
 char	**split_redirect(t_all *all, char *str)
 {
 	char	*ptr;
+	char	*tmp;
 	char	**args;
 
-	args = NULL;
-	if (ft_strchr(str, '>'))
+	tmp = ft_strdup(str);
+	if (ft_strchr(tmp, '>'))
 	{
-		ptr = ft_strchr(str, '>');
+		ptr = ft_strchr(tmp, '>');
+		if (*(ptr + 1) == '<')
+			ft_putstr_fd("syntax error near unexpected token `<'\n", STDOUT);
 		if (*(ptr + 1) == '>')
 		{
+			if (ft_strchr(ptr, '<'))
+				ft_putstr_fd("syntax error near unexpected token\n", STDOUT);
 			all->cmd.flag_d_red_out = 1;
-			args = ft_splitset(str, " >\t");
+			args = ft_splitset(tmp, " >");
 		}
 		else
 		{
 			all->cmd.flag_red_out = 1;
-			args = ft_splitset(str, " >\t");
+			args = ft_splitset(tmp, " >");
 		}
 	}
-	else if (ft_strchr(str, '<'))
+	else if (ft_strchr(tmp, '<'))
 	{
-		ptr = ft_strchr(str, '<');
+		ptr = ft_strchr(tmp, '<');
 		if (*(ptr + 1) == '<')
 		{
+			if (ft_strchr(ptr, '>') || ft_strchr(ptr, '<'))
+				ft_putstr_fd("syntax error near unexpected token\n", STDOUT);
 			all->cmd.flag_d_red_out = 1;
-			args = ft_splitset(str, " <\t");
+			args = ft_splitset(tmp, " <");
 		}
 		else
 		{
 			all->cmd.flag_red_out = 1;
-			args = ft_splitset(str, " <\t");
+			args = ft_splitset(tmp, " <");
 		}
 	}
 	else
-		args = ft_splitset(str, " \t");
+		args = ft_split(tmp, ' ');
+	free(tmp);
 	return (args);
 }
 
@@ -46,7 +54,7 @@ int	split_pipe(t_all *all, char *str)
 
 	if (str[0] == '|')
 		ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
-		cmds = ft_split(str, '|');
+	cmds = ft_split(str, '|');
 	i = -1;
 	while (cmds[++i])
 	{

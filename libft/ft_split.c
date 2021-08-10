@@ -1,87 +1,78 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: felisabe <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/06 07:01:58 by felisabe          #+#    #+#             */
-/*   Updated: 2021/04/16 14:28:22 by felisabe         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-static size_t	ft_words_count(char const *s, char c)
+static	int		count_words(const char *str, char delimiter)
 {
-	size_t	wc;
+	int count;
 
-	wc = 0;
-	while (*s)
+	count = 0;
+	while (*str)
 	{
-		if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
-			wc++;
-		s++;
+		if (*str == delimiter)
+			str++;
+		else if (*str != delimiter && *str)
+		{
+			while (*str != delimiter && *str)
+				str++;
+			count++;
+		}
 	}
-	return (wc);
+	return (count);
 }
 
-static size_t	ft_word_len(char const *s, char c)
+static	int		ft_len(char const *str, char delimiter, int i)
 {
-	size_t	len;
+	int length;
 
-	len = 0;
-	while (*s != c && *s != '\0')
+	length = 0;
+	while (str[i] != delimiter && str[i] != '\0')
 	{
-		s++;
-		len++;
+		length++;
+		i++;
 	}
-	return (len);
+	return (length);
 }
 
-static void	*ft_leaks(char **splitted, int words)
+static	char	**free_tab(char **tab, int i)
 {
-	while (words--)
-		free(*(splitted++));
-	free(splitted);
+	while (i >= 0)
+		free(tab[i--]);
 	return (NULL);
 }
 
-static char	**ft_fill(const char *s, int words, char c, char **splitted)
+static	char	**mem_alloc(char const *s, char **tab, char delimiter, int len)
 {
-	int		i;
-	size_t	j;
-	size_t	len;
+	int i;
+	int j;
+	int k;
 
-	i = -1;
-	while (++i < words)
+	i = 0;
+	j = 0;
+	while (s[i] && j < len)
 	{
-		while (*s == c)
-			s++;
-		len = ft_word_len(s, c);
-		splitted[i] = (char *)malloc(sizeof(char) * (len + 1));
-		if (!splitted[i])
-			return (ft_leaks(splitted, i));
-		j = 0;
-		while (j < len)
-			splitted[i][j++] = *s++;
-		splitted[i][j] = '\0';
+		k = 0;
+		while (s[i] == delimiter)
+			i++;
+		tab[j] = (char *)malloc(sizeof(char) * (ft_len(s, delimiter, i) + 1));
+		if (tab[j] == NULL)
+			return (free_tab((char **)tab, j));
+		while (s[i] && s[i] != delimiter)
+			tab[j][k++] = s[i++];
+		tab[j][k] = '\0';
+		j++;
 	}
-	splitted[i] = NULL;
-	return (splitted);
+	tab[j] = NULL;
+	return (tab);
 }
 
-char	**ft_split(char const *s, char c)
+char			**ft_split(char const *s, char c)
 {
-	char	**splitted;
-	size_t	wc;
+	char	**tab;
+	int		i;
 
-	if (!s)
+	if (s == NULL)
 		return (NULL);
-	wc = ft_words_count(s, c);
-	splitted = (char **)malloc(sizeof(char *) * (wc + 1));
-	if (!splitted)
+	i = count_words(s, c);
+	if (!(tab = (char **)malloc(sizeof(char *) * (i + 1))))
 		return (NULL);
-	splitted = ft_fill(s, wc, c, splitted);
-	return (splitted);
+	return (mem_alloc(s, tab, c, i));
 }

@@ -2,18 +2,18 @@
 
 static void		init_l(t_split *l)
 {
-	l->f = 0;
+	l->flag = 0;
 	l->j = 0;
 }
 
-static char		**free_tab(char **tab)
+static char		**free_array(char **array)
 {
 	int i;
 
 	i = -1;
-	while (tab[++i])
-		free(tab[i]);
-	free(tab);
+	while (array[++i])
+		free(array[i]);
+	free(array);
 	return (NULL);
 }
 
@@ -28,74 +28,75 @@ static int		isset(char *s, char c)
 	return (0);
 }
 
-static char		*malloc_word(char *mem, char *set)
+static char	*malloc_word(char *str, char *set)
 {
-	char		*word;
-	int			i;
+	char	*word;
+	int		i;
 
 	i = 0;
-	while (!isset(set, mem[i]))
+	while (isset(set, str[i]) == 0)
 		i++;
 	word = (char *)malloc(sizeof(char) * (i + 1));
 	if (word == NULL)
 		return (NULL);
 	i = 0;
-	while (mem[i] && !isset(set, mem[i]))
+	while (str[i] && isset(set, str[i]) == 0)
 	{
-		word[i] = mem[i];
+		word[i] = str[i];
 		i++;
 	}
 	word[i] = '\0';
 	return (word);
 }
 
-static int		count_words(char *s, char *set, t_split *l)
+static int		count_words(char *str, char *set, t_split *l)
 {
 	int			i;
 	int			counter;
 
 	i = -1;
 	counter = 0;
-	while (s[++i])
+	while (str[++i])
 	{
-		if (l->f == 0 && !isset(set, s[i]))
+		if (l->flag == 0 && isset(set, str[i]) == 0)
 		{
 			counter++;
-			l->f = 1;
+			l->flag = 1;
 		}
-		if (l->f == 1 && isset(set, s[i]))
-			l->f = 0;
+		if (l->flag == 1 && isset(set, str[i]) == 1)
+			l->flag = 0;
 	}
 	return (counter);
 }
 
-static char		**spls(char *s, char *set, t_split *l)
+static char		**spls(char *str, char *set, t_split *l)
 {
-	while (*s)
+	while (*str)
 	{
-		if (!isset(set, *s))
+		if (!isset(set, *str))
 		{
-			if (!(l->mem[l->j] = malloc_word(s, set)))
-				return (free_tab(l->mem));
-			while (*s && !isset(set, *s))
-				s++;
+			l->array[l->j] = malloc_word(str, set);
+			if (!l->array[l->j])
+				return (free_array(l->array));
+			while (*str && isset(set, *str) == 0)
+				str++;
 			l->j++;
 		}
-		if (*s == '\0')
+		if (*str == '\0')
 			break;
-		s++;
+		str++;
 	}
-	l->mem[l->j] = NULL;
-	return (l->mem);
+	l->array[l->j] = NULL;
+	return (l->array);
 }
 
-char	**ft_splitset(const char *s, const char *set)
+char	**ft_splitset(const char *str, const char *set)
 {
 	t_split l;
 
 	init_l(&l);
-	if (!(l.mem = (char **)malloc(sizeof(char *) *
-		(count_words((char *)s, (char *)set, &l) + 1))))
+	if (!(l.array = (char **)malloc(sizeof(char *) *
+		(count_words((char *)str, (char *)set, &l) + 1))))
 		return (NULL);
-	return (spls((char *)s, (char *)set, &l));
+	return (spls((char *)str, (char *)set, &l));
 }

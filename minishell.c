@@ -2,8 +2,8 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		i;
-	int		j;
+	// int		i;
+	// int		j;
 	t_all	all;
 	char	*str;
 	char	*pwd;
@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **envp)
 		temp = all.begin;
 		while (temp)
 		{
-			printf("pipe=|%s|\n", temp->token_list); //здесь повторяется предыдущая строка! 
+			//printf("pipe=|%s|\n", temp->token_list); //здесь повторяется предыдущая строка! 
 			args = split_redirect(&all, temp->token_list); // делим строку для получения команд и аргументов
 			cmd = new_elem(args); //записываем команды и арг-ты в список
 			if (!cmd)
@@ -41,20 +41,22 @@ int	main(int argc, char **argv, char **envp)
 			free(args);
 			temp = temp->next;
 		}
+		free_token_list(temp);
 		temp_cmd = cmd_list;
-		while (temp_cmd)
-		{
-			i = -1;
-			while (temp_cmd->args[++i])
-			{
-				j = -1;
-				while (temp_cmd->args[i][++j])
-					decoder(&temp_cmd->args[i], &j);
-			}
-			temp_cmd = temp_cmd->next;
-		}
+		// while (temp_cmd)
+		// {
+		// 	i = -1;
+		// 	while (temp_cmd->args[++i])
+		// 	{
+		// 		printf("cmd_args[%d]=|%s|\n", i, temp_cmd->args[i]);
+		// 		j = -1;
+		// 		while (temp_cmd->args[i][++j])
+		// 			decoder(&temp_cmd->args[i], &j);
+		// 	}
+		// 	temp_cmd = temp_cmd->next;
+		// }
 		// exec_builtin(&all);
-		// free_list(cmd_list);
+		//free_cmd_list(cmd_list);
 		// if (check_string(buf, &all))
 			// break ;
 	}
