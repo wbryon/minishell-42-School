@@ -96,12 +96,13 @@ int			ctrl_d(t_all *all);
 char		*coder(char *str, int *i);
 void		decoder(char **str, int *i);
 char		*parser(t_all *all);
+char		*parse_quotes(char *str, int *i);
+int			parse_pipe(t_all *all, char *str);
 char		**split_redirect(t_all *all, char *str);
-int			split_pipe(t_all *all, char *str);
+char		**split_redirect_out(t_all *all, char *str);
 void		check_dquotes(t_all *all);
 int			check_quotes(t_all *all);
 int			quotes_checker(t_all *all);
-char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
 void    	pipe_add_back(t_token **cmds, t_token *new);
 t_token   	*new_pipe(char *cmd);
@@ -123,5 +124,11 @@ int		exec_export(t_all *all);
 void    exec_unset(t_all *all);
 void    exec_cd(t_all *all);
 void    exec_exit(t_all *all);
+
+/*
+ * Utils
+ */
+
+int		is_printable(char *str);
 
 #endif

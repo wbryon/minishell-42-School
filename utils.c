@@ -68,3 +68,16 @@ char    *ft_trim_spase_tab(char *str)
     }
     return (str);
 }
+
+int	is_printable(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] > 32 && str[i] < 127 && str[i] != '>')
+			return (1);
+	}
+	return (0);
+}

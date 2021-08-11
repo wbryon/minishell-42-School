@@ -3,7 +3,8 @@ SRCS	=	minishell.c\
 			check_syntax.c\
 			replace_char.c\
 			parser.c \
-			split_pipe.c\
+			parse_pipe.c\
+			parse_redirects.c\
 			new_elem.c \
 			exec_builtin.c \
 			builtins/exec_echo.c \

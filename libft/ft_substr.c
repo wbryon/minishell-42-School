@@ -6,7 +6,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	if (!s)
 		return (NULL);
-	substr = ft_calloc(sizeof(char), len + 1);
+	substr = (char *)ft_calloc(sizeof(char), len + 1);
 	if (substr)
 	{
 		if (start >= ft_strlen(s))
