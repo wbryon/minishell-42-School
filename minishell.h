@@ -62,6 +62,7 @@ typedef struct s_parse
 
 typedef struct s_all
 {
+	int				cmd_total;
 	char			**env;
 	t_cmd			*cmd;
 	t_parse			parse;
@@ -101,7 +102,10 @@ char		*parse_quotes(char *str, int *i);
 t_cmd		*new_elem(char **args);
 void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
-void		exec_builtin(t_all *all);
+int			execution(t_all *all);
+void		exec_single(t_all *all);
+int 		exec_pipe(t_all *all);
+char		*try_path(char *bin);
 void		free_array(char **array);
 int			search_env(t_all *all, char *key);
 int			exec_bin(t_all *all);

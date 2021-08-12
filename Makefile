@@ -5,7 +5,9 @@ SRCS	=	minishell.c\
 			parser.c \
 			split_pipe.c\
 			new_elem.c \
-			exec_builtin.c \
+			exec_single.c \
+			exec_pipe.c \
+			execution.c \
 			builtins/exec_echo.c \
 			builtins/exec_env.c \
 			builtins/exec_pwd.c \

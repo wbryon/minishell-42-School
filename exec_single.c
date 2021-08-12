@@ -1,7 +1,8 @@
 #include "minishell.h"
 
-void	exec_builtin(t_all *all)
+void	exec_single(t_all *all)
 {
+	
 	if (!ft_strcmp(all->cmd->args[0], "echo"))
 		exec_echo(all);
 	else if (!ft_strcmp(all->cmd->args[0], "env"))

@@ -2,6 +2,7 @@
 
 void	init_vars(t_all *all)
 {
+	all->cmd_total = 0;
 	all->env = NULL;
 	all->command_buf = NULL;
 	all->parse.flag = 0;

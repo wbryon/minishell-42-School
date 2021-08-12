@@ -55,8 +55,10 @@ int	split_pipe(t_all *all, char *str)
 		all->cmd = NULL;
 	}
 	i = -1;
+	all->cmd_total = 0;
 	while (pipes[++i])
 	{
+		(all->cmd_total)++;
 		args = ft_split(pipes[i], ' ');
 		new = new_elem(args);
 		if (!new)

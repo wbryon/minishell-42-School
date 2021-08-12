@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	get_path(t_all *all, char **path, char **splitted)
+static void	get_path(char *bin, char **path, char **splitted)
 {
 	int				i;
 	char			*tmp;
@@ -16,11 +16,11 @@ static void	get_path(t_all *all, char **path, char **splitted)
 		entity = readdir(dir);
 		while (entity)
 		{
-			if (!ft_strcmp(entity->d_name, all->cmd->args[0]))
+			if (!ft_strcmp(entity->d_name, bin))
 			{
 				*path = ft_strjoin(splitted[i], "/");
 				tmp = *path;
-				*path = ft_strjoin(*path, all->cmd->args[0]);
+				*path = ft_strjoin(*path, bin);
 				free(tmp);
 			}
 			entity = readdir(dir);
@@ -29,7 +29,7 @@ static void	get_path(t_all *all, char **path, char **splitted)
 	}
 }
 
-static char	*try_path(t_all *all)
+char	*try_path(char *bin)
 {
 	char	*path;
 	char	**splitted;
@@ -41,7 +41,7 @@ static char	*try_path(t_all *all)
 	if (!splitted)
 		return (NULL);
 	path = NULL;
-	get_path(all, &path, splitted);
+	get_path(bin, &path, splitted);
 	free_array(splitted);
 	return (path);
 }
@@ -56,7 +56,7 @@ int	exec_bin(t_all *all)
 	if (ft_strchr("./", all->cmd->args[0][0]))
 		path = ft_strdup(all->cmd->args[0]);
 	else
-		path = try_path(all);
+		path = try_path(all->cmd->args[0]);
 	if (path)
 	{
 		pid = fork();

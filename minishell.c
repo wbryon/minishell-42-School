@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **envp)
 		// 	}
 		// 	temp_cmd = temp_cmd->next;
 		// }
-		// exec_builtin(&all);
+		execution(&all);
 		// if (check_string(buf, &all))
 			// break ;
 	}
