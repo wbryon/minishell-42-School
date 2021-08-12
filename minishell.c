@@ -2,7 +2,7 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		i;
+	// int		i;
 	// int		j;
 	t_all	all;
 	char	*str;
@@ -30,14 +30,13 @@ int	main(int argc, char **argv, char **envp)
 		str = parser(&all);
 		split_pipe(&all, str); // деление строк по пайпам
 		temp = all.cmd;
-		while (temp)
+		while (all.cmd)
 		{
-			i = -1;
-			while (temp->args[++i])
-				printf("args[%d]: |%s|\n", i, temp->args[i]);
-			temp = temp->next;
+			printf("name: |%s|, args: |%s|\n", all.cmd->name, all.cmd->args);
+			all.cmd = all.cmd->next;
 			printf("-------\n");
 		}
+		free_list(temp);
 		// temp_cmd = cmd_list;
 		// while (temp_cmd)
 		// {
@@ -50,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 		// 	}
 		// 	temp_cmd = temp_cmd->next;
 		// }
-		execution(&all);
+		// execution(&all);
 		// if (check_string(buf, &all))
 			// break ;
 	}

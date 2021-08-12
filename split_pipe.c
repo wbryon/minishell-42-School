@@ -42,25 +42,27 @@ char	**split_redirect(t_all *all, char *str)
 int	split_pipe(t_all *all, char *str)
 {
 	int		i;
+	int		j;
 	char	**pipes;
-	char	**args;
+	char	*name;
+	char	*args;
 	t_cmd	*new;
 
 	if (str[0] == '|')
 		ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT);
 	pipes = ft_split(str, '|');
-	if (all->cmd)
-	{
-		free_list(all->cmd);
-		all->cmd = NULL;
-	}
 	i = -1;
 	all->cmd_total = 0;
 	while (pipes[++i])
 	{
 		(all->cmd_total)++;
-		args = ft_split(pipes[i], ' ');
-		new = new_elem(args);
+		pipes[i] = ft_strtrim(pipes[i], " \t");
+		j = 0;
+		while (pipes[i][j] != ' ' && pipes[i][j] != '>' && pipes[i][j] != '<' && pipes[i][j] != '\0')
+			j++;
+		name = ft_substr(pipes[i], 0, j);
+		args = ft_strdup(pipes[i] + j);
+		new = new_elem(name, args);
 		if (!new)
 			exit(1);
 		elem_add_back(&all->cmd, new);

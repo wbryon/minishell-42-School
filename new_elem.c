@@ -2,7 +2,6 @@
 
 void    free_list(t_cmd *list)
 {
-    // int     i;
     t_cmd   *del;
     t_cmd   *cur;
 
@@ -11,9 +10,7 @@ void    free_list(t_cmd *list)
     {
         del = cur;
         cur = cur->next;
-        // i = -1;
-        // while (del->args[++i])
-            // free(del->args[i]);
+        free(del->name);
         free(del->args);
         free(del);
     }
@@ -41,14 +38,15 @@ void    elem_add_back(t_cmd **cmds, t_cmd *new)
         *cmds = new;
 }
 
-t_cmd   *new_elem(char **args)
+t_cmd   *new_elem(char *name, char *args)
 {
     t_cmd   *new;
 
     new = malloc(sizeof(t_cmd));
     if (new)
     {
-        new->args = args;
+        new->name = ft_strdup(name);
+        new->args = ft_strdup(args);
         new->next = NULL;
     }
     return (new);

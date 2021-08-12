@@ -100,7 +100,7 @@ void		check_dquotes(t_all *all);
 int			check_quotes(t_all *all);
 int			quotes_checker(t_all *all);
 char		*parse_quotes(char *str, int *i);
-t_cmd		*new_elem(char **args);
+t_cmd		*new_elem(char *name, char *args);
 void		elem_add_back(t_cmd **cmds, t_cmd *new);
 void		free_list(t_cmd *list);
 int			execution(t_all *all);

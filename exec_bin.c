@@ -48,22 +48,23 @@ char	*try_path(char *bin)
 
 int	exec_bin(t_all *all)
 {
+	(void)all;
 	char	*path;
 	pid_t	pid;
 
-	if (!all->cmd->args[0])
+	if (!all->cmd->name)
 		return (5);
-	if (ft_strchr("./", all->cmd->args[0][0]))
-		path = ft_strdup(all->cmd->args[0]);
+	if (ft_strchr("./", all->cmd->name[0]))
+		path = ft_strdup(all->cmd->name);
 	else
-		path = try_path(all->cmd->args[0]);
+		path = try_path(all->cmd->name);
 	if (path)
 	{
 		pid = fork();
 		if (pid == -1)
 			return (4);
-		if (pid == 0)
-			execve(path, all->cmd->args, all->env);
+		// if (pid == 0)
+			// execve(path, all->cmd->args, all->env);
 		else
 			wait(NULL);
 	}
