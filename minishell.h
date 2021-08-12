@@ -40,7 +40,8 @@
 
 typedef struct s_cmd
 {
-	char			**args;
+	char			*name;
+	char			*args;
 	struct s_cmd	*next;
 }					t_cmd;
 

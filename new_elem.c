@@ -2,7 +2,7 @@
 
 void    free_list(t_cmd *list)
 {
-    int     i;
+    // int     i;
     t_cmd   *del;
     t_cmd   *cur;
 
@@ -11,9 +11,9 @@ void    free_list(t_cmd *list)
     {
         del = cur;
         cur = cur->next;
-        i = -1;
-        while (del->args[++i])
-            free(del->args[i]);
+        // i = -1;
+        // while (del->args[++i])
+            // free(del->args[i]);
         free(del->args);
         free(del);
     }
