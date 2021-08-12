@@ -28,12 +28,13 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strlen(all.command_buf) > 0)
 			add_history(all.command_buf);
 		str = parser(&all);
-		split_pipe(&all, str); // деление строк по пайпам
+		parse_pipe(&all, str); // деление строк по пайпам
 		temp = all.begin;
 		while (temp)
 		{
-			//printf("pipe=|%s|\n", temp->token_list); //здесь повторяется предыдущая строка! 
-			args = split_redirect(&all, temp->token_list); // делим строку для получения команд и аргументов
+			printf("pipe=|%s|\n", temp->token_list); //здесь повторяется предыдущая строка!
+			args = parse_redirect(&all, temp->token_list); // делим строку для получения команд и аргументов
+			//printf("check\n");
 			cmd = new_elem(args); //записываем команды и арг-ты в список
 			if (!cmd)
 				exit(1);

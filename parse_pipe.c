@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	**split_redirect(t_all *all, char *str)
+char	**parse_redirect(t_all *all, char *str)
 {
 	char	*tmp;
 	char	**args;
@@ -8,7 +8,7 @@ char	**split_redirect(t_all *all, char *str)
 	args = NULL;
 	tmp = ft_strdup(str);
 	if (ft_strchr(tmp, '>'))
-	split_redirect_out(all, tmp);
+	parse_redirect_out(all, tmp);
 	else if (ft_strchr(tmp, '<'))
 	{
 		tmp = ft_strchr(tmp, '<');
